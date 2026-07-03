@@ -16,6 +16,7 @@ import {
   Layout,
   Server,
   Database,
+  Download,
   Sparkles,
   Users,
   FileCode,
@@ -50,6 +51,11 @@ const features = [
     icon: Database,
     title: "数据库设计",
     description: "ER 图、表结构、索引策略的完整数据库设计方案",
+  },
+  {
+    icon: Download,
+    title: "一键导出文档",
+    description: "支持 Markdown 和 ZIP 格式批量导出，方便分享和版本管理",
   },
 ];
 
