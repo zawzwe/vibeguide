@@ -3,6 +3,7 @@ import { getDb, credits } from "@/db";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { UserProfile } from "@/components/user-profile";
+import { isAdmin } from "@/lib/admin";
 
 export const dynamic = "force-dynamic";
 
@@ -15,12 +16,17 @@ export default async function MyPage() {
     redirect("/auth/login");
   }
 
+  const userEmail = user.email || "未知";
+  const admin = isAdmin(user.email);
+
   const db = getDb();
   const [creditRecord] = await db
     .select({ balance: credits.balance })
     .from(credits)
     .where(eq(credits.userId, user.sub))
     .limit(1);
+
+  const displayCredits = admin ? 999 : (creditRecord?.balance ?? 0);
 
   return (
     <div className="space-y-6">
@@ -31,8 +37,9 @@ export default async function MyPage() {
         </p>
       </div>
       <UserProfile
-        email={user.email || "未知"}
-        credits={creditRecord?.balance ?? 0}
+        email={userEmail}
+        credits={displayCredits}
+        isAdmin={admin}
       />
     </div>
   );

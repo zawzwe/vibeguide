@@ -47,10 +47,10 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
 export function Sidebar() {
   return (
     <aside className="fixed left-0 top-0 z-40 hidden h-screen w-[240px] border-r bg-background md:flex md:flex-col">
-      <div className="flex h-14 items-center gap-2 border-b px-6">
+      <Link href="/" className="flex h-14 items-center gap-2 border-b px-6 hover:bg-accent/50 transition-colors">
         <Sparkles className="h-5 w-5 text-primary" />
         <span className="font-bold text-lg">VibeGuide</span>
-      </div>
+      </Link>
       <div className="flex-1 overflow-auto py-4">
         <SidebarNav />
       </div>

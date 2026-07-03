@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { getDb, credits } from "@/db";
 import { eq } from "drizzle-orm";
+import { isAdmin } from "@/lib/admin";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +14,15 @@ export async function POST() {
 
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    // Admin users have unlimited credits
+    if (isAdmin(user.email)) {
+      return NextResponse.json({
+        hasCredits: true,
+        balance: 999,
+        isAdmin: true,
+      });
     }
 
     const db = getDb();

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { SidebarNav } from "@/components/sidebar";
+import Link from "next/link";
 import { Menu, Sparkles } from "lucide-react";
 
 export function DashboardHeader() {
@@ -20,10 +21,10 @@ export function DashboardHeader() {
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="w-[240px] p-0">
-          <div className="flex h-14 items-center gap-2 border-b px-6">
+          <Link href="/" className="flex h-14 items-center gap-2 border-b px-6 hover:bg-accent/50 transition-colors">
             <Sparkles className="h-5 w-5 text-primary" />
             <span className="font-bold text-lg">VibeGuide</span>
-          </div>
+          </Link>
           <div className="py-4">
             <SidebarNav onNavigate={() => setOpen(false)} />
           </div>
@@ -34,10 +35,10 @@ export function DashboardHeader() {
       </Sheet>
 
       {/* Brand for mobile */}
-      <div className="flex items-center gap-2 md:hidden">
+      <Link href="/" className="flex items-center gap-2 md:hidden">
         <Sparkles className="h-5 w-5 text-primary" />
         <span className="font-bold text-lg">VibeGuide</span>
-      </div>
+      </Link>
 
       <div className="flex-1" />
     </header>
