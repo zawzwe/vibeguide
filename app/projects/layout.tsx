@@ -1,7 +1,7 @@
 import { Sidebar } from "@/components/sidebar";
 import { DashboardHeader } from "@/components/dashboard-header";
 
-export default function DashboardLayout({
+export default function ProjectsLayout({
   children,
 }: {
   children: React.ReactNode;
