@@ -32,6 +32,14 @@ const docTypes = [
   { key: "database", label: "数据库设计" },
 ];
 
+function formatMarkdown(markdown: string) {
+  return markdown
+    .replace(/\r\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .replace(/<br\s*\/?>/gi, "\n")
+    .trim();
+}
+
 export function StepDocuments({
   description,
   qa,
@@ -85,7 +93,6 @@ export function StepDocuments({
 
   const handleDownloadZip = async () => {
     if (!projectId) {
-      // For new projects without an ID, download directly using JSZip
       const JSZip = (await import("jszip")).default;
       const zip = new JSZip();
       for (const doc of docTypes) {
@@ -146,7 +153,7 @@ export function StepDocuments({
     <div className="space-y-4">
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-2">
               <FileText className="h-5 w-5 text-primary" />
               <div>
@@ -158,9 +165,7 @@ export function StepDocuments({
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() =>
-                  setViewMode(viewMode === "markdown" ? "preview" : "markdown")
-                }
+                onClick={() => setViewMode(viewMode === "markdown" ? "preview" : "markdown")}
               >
                 {viewMode === "markdown" ? (
                   <>
@@ -195,23 +200,44 @@ export function StepDocuments({
                 </TabsTrigger>
               ))}
             </TabsList>
-            {docTypes.map((doc) => (
-              <TabsContent key={doc.key} value={doc.key} className="mt-4">
-                <div className="min-h-[400px] max-h-[600px] overflow-auto rounded-lg border bg-muted/30 p-6">
-                  {viewMode === "markdown" ? (
-                    <pre className="text-sm whitespace-pre-wrap font-mono">
-                      {documents[doc.key] || "暂无内容"}
-                    </pre>
-                  ) : (
-                    <div className="prose prose-sm dark:prose-invert max-w-none">
-                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                        {documents[doc.key] || "暂无内容"}
-                      </ReactMarkdown>
+            {docTypes.map((doc) => {
+              const content = formatMarkdown(documents[doc.key] || "暂无内容");
+              return (
+                <TabsContent key={doc.key} value={doc.key} className="mt-4">
+                  <div className="min-h-[520px] max-h-[760px] overflow-auto rounded-2xl border bg-gradient-to-br from-background via-background to-muted/20 p-6 shadow-inner">
+                    <div className="mx-auto max-w-4xl rounded-2xl border bg-background/95 p-6 shadow-sm">
+                      <div className="mb-6 border-b pb-4">
+                        <div className="flex items-center justify-between gap-4">
+                          <div>
+                            <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
+                              {doc.label}
+                            </p>
+                            <h3 className="mt-2 text-2xl font-semibold tracking-tight">
+                              {doc.label}
+                            </h3>
+                          </div>
+                          <div className="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                            Structured Document
+                          </div>
+                        </div>
+                      </div>
+
+                      {viewMode === "markdown" ? (
+                        <pre className="whitespace-pre-wrap break-words rounded-xl bg-muted/40 p-5 font-mono text-sm leading-7 text-foreground">
+                          {content}
+                        </pre>
+                      ) : (
+                        <div className="prose prose-lg dark:prose-invert max-w-none prose-headings:scroll-mt-20 prose-headings:tracking-tight prose-p:leading-7 prose-li:leading-7 prose-table:display-block prose-table:overflow-x-auto prose-table:border-collapse prose-th:border prose-th:border-border prose-th:bg-muted prose-th:px-3 prose-th:py-2 prose-td:border prose-td:border-border prose-td:px-3 prose-td:py-2 prose-img:rounded-xl prose-hr:my-8 prose-hr:border-border">
+                          <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                            {content}
+                          </ReactMarkdown>
+                        </div>
+                      )}
                     </div>
-                  )}
-                </div>
-              </TabsContent>
-            ))}
+                  </div>
+                </TabsContent>
+              );
+            })}
           </Tabs>
         </CardContent>
       </Card>
@@ -220,10 +246,7 @@ export function StepDocuments({
         <Button variant="outline" onClick={onBack}>
           <ArrowLeft className="h-4 w-4 mr-1" /> 上一步
         </Button>
-        <Button
-          onClick={() => onSave(documents)}
-          disabled={!hasAllDocs || isSaving}
-        >
+        <Button onClick={() => onSave(documents)} disabled={!hasAllDocs || isSaving}>
           <Save className="h-4 w-4 mr-1" />
           {isSaving ? "保存中..." : "保存项目"}
         </Button>

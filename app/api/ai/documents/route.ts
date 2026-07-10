@@ -6,74 +6,109 @@ const DOC_TYPES = [
   {
     key: "journey-map",
     title: "用户旅程地图",
-    prompt: `你是一位用户体验设计专家。请根据以下项目描述和需求分析，生成一份详细的用户旅程地图文档。
-包含以下内容：
-1. 用户角色画像 (Persona)
-2. 用户场景 (Scenarios)
-3. 用户旅程阶段 (Awareness → Consideration → Onboarding → Usage → Advocacy)
-4. 每个阶段的关键行为、情感曲线、痛点和机会点
-5. 服务蓝图要点
+    prompt: `你是一位用户体验设计专家。请根据以下项目描述和需求分析，生成一份结构清晰、排版整洁的用户旅程地图文档。
 
-使用Markdown格式，包含适当的标题层级和表格。`,
+输出要求：
+- 必须使用 Markdown
+- 严格使用标题层级：#、##、###
+- 每个二级标题下面最多 3-5 个要点，避免长段落堆叠
+- 尽量使用表格呈现旅程阶段，但不要让表格过宽
+- 不要输出 HTML 标签，不要使用 <br>
+- 不要把多个小节写成连续大段文字
+
+固定结构：
+1. 文档概述
+2. 用户角色画像（Persona）
+3. 核心使用场景
+4. 用户旅程阶段（按 Awareness → Consideration → Onboarding → Usage → Advocacy）
+5. 痛点与机会点
+6. 服务蓝图要点
+7. 结论与建议`,
   },
   {
     key: "prd",
     title: "产品需求PRD",
-    prompt: `你是一位资深产品经理。请根据以下项目描述和需求分析，生成一份专业的产品需求文档(PRD)。
-包含以下内容：
-1. 产品概述与愿景
-2. 目标用户与市场分析
-3. 功能需求（按优先级P0/P1/P2分类）
-4. 非功能性需求（性能、安全、可访问性等）
-5. 验收标准
-6. 发布计划与里程碑
-7. 风险与假设
+    prompt: `你是一位资深产品经理。请根据以下项目描述和需求分析，生成一份结构清晰、可直接阅读的产品需求文档(PRD)。
 
-使用Markdown格式，包含适当的标题层级和表格。`,
+输出要求：
+- 必须使用 Markdown
+- 严格使用标题层级：#、##、###
+- 每个小节使用简洁短句和项目符号，避免长篇大论
+- 需求列表用表格或有序列表，但保持版面整齐
+- 不要输出 HTML 标签，不要使用 <br>
+- 不要让内容挤成连续长段落
+
+固定结构：
+1. 产品概述与愿景
+2. 目标用户与使用场景
+3. 核心问题与解决方案
+4. 功能需求（按 P0 / P1 / P2 分类）
+5. 非功能性需求
+6. 验收标准
+7. 风险与假设
+8. 里程碑与交付建议`,
   },
   {
     key: "frontend",
     title: "前端设计文档",
-    prompt: `你是一位前端架构师。请根据以下项目描述和需求分析，生成一份前端设计文档。
-包含以下内容：
-1. 技术栈推荐（框架、状态管理、UI库等）
-2. 组件树架构图（文字描述）
-3. 路由设计（列出所有路由及其对应的页面组件）
-4. 状态管理方案
-5. 响应式设计策略
-6. 性能优化方案
-7. 前端项目目录结构建议
+    prompt: `你是一位前端架构师。请根据以下项目描述和需求分析，生成一份结构清晰、排版整洁的前端设计文档。
 
-使用Markdown格式，包含适当的标题层级和代码块。`,
+输出要求：
+- 必须使用 Markdown
+- 严格使用标题层级：#、##、###
+- 章节内容尽量采用列表和短段落
+- 如果需要展示架构，优先用列表和表格，不要输出过长的连写文本
+- 不要输出 HTML 标签，不要使用 <br>
+
+固定结构：
+1. 技术栈推荐
+2. 页面与路由设计
+3. 组件拆分与目录结构
+4. 状态管理方案
+5. 响应式与交互设计
+6. 性能优化方案
+7. 开发建议`,
   },
   {
     key: "backend",
     title: "后端设计文档",
-    prompt: `你是一位后端架构师。请根据以下项目描述和需求分析，生成一份后端设计文档。
-包含以下内容：
-1. 技术栈推荐（语言、框架、数据库等）
-2. API 设计（列出所有REST/GraphQL端点）
-3. 数据流架构
-4. 服务拆分与微服务方案
-5. 认证与授权方案
-6. 错误处理与日志策略
-7. 部署与DevOps建议
+    prompt: `你是一位后端架构师。请根据以下项目描述和需求分析，生成一份结构清晰、可阅读性高的后端设计文档。
 
-使用Markdown格式，包含适当的标题层级和代码块。`,
+输出要求：
+- 必须使用 Markdown
+- 严格使用标题层级：#、##、###
+- 每个小节控制在 3-5 个要点，避免大段连续文字
+- API 设计尽量用表格呈现，字段对齐清晰
+- 不要输出 HTML 标签，不要使用 <br>
+
+固定结构：
+1. 技术栈推荐
+2. 系统架构概览
+3. API 设计
+4. 数据流与业务流程
+5. 认证与权限方案
+6. 错误处理与日志策略
+7. 部署与运维建议`,
   },
   {
     key: "database",
     title: "数据库设计",
-    prompt: `你是一位数据库架构师。请根据以下项目描述和需求分析，生成一份数据库设计文档。
-包含以下内容：
-1. 数据库选型建议（关系型/非关系型及其理由）
-2. ER图文字描述（实体及关系）
-3. 核心表结构设计（表名、字段名、类型、约束、索引）
-4. 数据字典
-5. 查询优化与索引策略
-6. 数据迁移与备份策略
+    prompt: `你是一位数据库架构师。请根据以下项目描述和需求分析，生成一份结构清晰、排版整洁的数据库设计文档。
 
-使用Markdown格式，包含适当的标题层级和SQL代码块。`,
+输出要求：
+- 必须使用 Markdown
+- 严格使用标题层级：#、##、###
+- 核心表结构使用表格展示，字段对齐清晰
+- 每个章节简洁明了，避免长段落堆积
+- 不要输出 HTML 标签，不要使用 <br>
+
+固定结构：
+1. 数据库选型建议
+2. ER 关系概览
+3. 核心表结构设计
+4. 数据字典
+5. 索引与查询优化
+6. 数据迁移与备份策略`,
   },
 ];
 
@@ -108,20 +143,13 @@ export async function POST(request: NextRequest) {
       apiKey: process.env.DEEPSEEK_API_KEY!,
     });
 
-    // Generate all 5 documents in parallel
     const docPromises = DOC_TYPES.map(async (doc) => {
       try {
         const completion = await openai.chat.completions.create({
           model: "deepseek-v4-flash",
           messages: [
-            {
-              role: "system",
-              content: doc.prompt,
-            },
-            {
-              role: "user",
-              content: userPrompt,
-            },
+            { role: "system", content: doc.prompt },
+            { role: "user", content: userPrompt },
           ],
           stream: false,
           max_tokens: 8192,
@@ -141,7 +169,6 @@ export async function POST(request: NextRequest) {
     });
 
     const results = await Promise.all(docPromises);
-
     const documents: Record<string, string> = {};
     results.forEach(({ key, content }) => {
       documents[key] = content;
@@ -150,9 +177,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ documents });
   } catch (error) {
     console.error("AI documents error:", error);
-    return NextResponse.json(
-      { error: "Failed to generate documents" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to generate documents" }, { status: 500 });
   }
 }
