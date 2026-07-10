@@ -5,7 +5,17 @@ import { Check, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { PricingPurchaseButton } from "@/components/pricing-purchase-button";
 
-const plans = [
+type PricingPlan = {
+  name: string;
+  price: string;
+  projects: number;
+  description: string;
+  features: string[];
+  popular: boolean;
+  plan: "10" | "30";
+};
+
+const plans: PricingPlan[] = [
   {
     name: "基础版",
     price: "20",
