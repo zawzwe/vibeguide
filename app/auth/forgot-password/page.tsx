@@ -1,10 +1,14 @@
+import { SiteHeader } from "@/components/site-header";
 import { ForgotPasswordForm } from "@/components/forgot-password-form";
 
 export default function Page() {
   return (
-    <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
-      <div className="w-full max-w-sm">
-        <ForgotPasswordForm />
+    <div className="min-h-svh w-full bg-background">
+      <SiteHeader />
+      <div className="flex min-h-[calc(100svh-3.5rem)] w-full items-center justify-center p-6 md:p-10">
+        <div className="w-full max-w-sm">
+          <ForgotPasswordForm />
+        </div>
       </div>
     </div>
   );
