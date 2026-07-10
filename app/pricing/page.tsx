@@ -1,9 +1,9 @@
 import { SiteHeader } from "@/components/site-header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Check, ArrowRight, Sparkles } from "lucide-react";
+import { Check, Sparkles } from "lucide-react";
 import Link from "next/link";
+import { PricingPurchaseButton } from "@/components/pricing-purchase-button";
 
 const plans = [
   {
@@ -84,11 +84,7 @@ export default function PricingPage() {
                       </div>
                     ))}
                   </div>
-                  <Button className="w-full" size="lg" asChild>
-                    <Link href={`/auth/login?redirect=/pricing`}>
-                      立即购买 <ArrowRight className="h-4 w-4 ml-1" />
-                    </Link>
-                  </Button>
+                  <PricingPurchaseButton plan={plan.plan} className="w-full" />
                 </CardContent>
               </Card>
             ))}
