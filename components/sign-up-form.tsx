@@ -34,7 +34,7 @@ export function SignUpForm({
     setError(null);
 
     if (password !== repeatPassword) {
-      setError("Passwords do not match");
+      setError("两次输入的密码不一致");
       setIsLoading(false);
       return;
     }
@@ -50,7 +50,7 @@ export function SignUpForm({
       if (error) throw error;
       router.push("/auth/sign-up-success");
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+      setError(error instanceof Error ? error.message : "发生了错误，请稍后再试");
     } finally {
       setIsLoading(false);
     }
@@ -61,7 +61,7 @@ export function SignUpForm({
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">注册</CardTitle>
-          <CardDescription>创建一个新账号</CardDescription>
+          <CardDescription>注册完成后即可直接登录使用</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSignUp}>

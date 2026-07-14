@@ -16,15 +16,12 @@ export default function Page() {
         <div className="flex flex-col gap-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-2xl">
-                Thank you for signing up!
-              </CardTitle>
-              <CardDescription>Check your email to confirm</CardDescription>
+              <CardTitle className="text-2xl">恭喜注册成功</CardTitle>
+              <CardDescription>注册完成后即可直接登录使用</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-sm text-muted-foreground">
-                You&apos;ve successfully signed up. Please check your email to
-                confirm your account before signing in.
+                账号已经创建完成，现在就可以返回登录页登录使用。
               </p>
               <Button asChild className="w-full">
                 <Link href="/auth/login">返回登录页</Link>
