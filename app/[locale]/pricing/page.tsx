@@ -2,7 +2,8 @@ import { SiteHeader } from "@/components/site-header";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Check, Sparkles } from "lucide-react";
-import Link from "next/link";
+import { getTranslations } from "next-intl/server";
+import { Link } from "@/i18n/navigation";
 import { PricingPurchaseButton } from "@/components/pricing-purchase-button";
 
 type PricingPlan = {
@@ -15,41 +16,31 @@ type PricingPlan = {
   plan: "10" | "30";
 };
 
-const plans: PricingPlan[] = [
-  {
-    name: "基础版",
-    price: "20",
-    projects: 10,
-    description: "适合个人开发者快速上手",
-    features: [
-      "生成 10 个项目的完整文档",
-      "5 种文档类型全覆盖",
-      "Markdown 格式下载",
-      "ZIP 批量下载",
-      "AI 需求分析",
-    ],
-    popular: false,
-    plan: "10",
-  },
-  {
-    name: "专业版",
-    price: "40",
-    projects: 30,
-    description: "适合有多个项目需求的用户",
-    features: [
-      "生成 30 个项目的完整文档",
-      "5 种文档类型全覆盖",
-      "Markdown 格式下载",
-      "ZIP 批量下载",
-      "AI 需求分析",
-      "优先技术支持",
-    ],
-    popular: true,
-    plan: "30",
-  },
-];
+export default async function PricingPage() {
+  const t = await getTranslations("Pricing");
+  const nav = await getTranslations("Navigation");
+  const footer = await getTranslations("Home.footer");
+  const plans: PricingPlan[] = [
+    {
+      name: t("plans.basic.name"),
+      price: "20",
+      projects: 10,
+      description: t("plans.basic.description"),
+      features: t.raw("plans.basic.features") as string[],
+      popular: false,
+      plan: "10",
+    },
+    {
+      name: t("plans.pro.name"),
+      price: "40",
+      projects: 30,
+      description: t("plans.pro.description"),
+      features: t.raw("plans.pro.features") as string[],
+      popular: true,
+      plan: "30",
+    },
+  ];
 
-export default function PricingPage() {
   return (
     <div className="min-h-screen flex flex-col">
       <SiteHeader />
@@ -58,11 +49,11 @@ export default function PricingPage() {
         <div className="max-w-7xl mx-auto px-4 md:px-6">
           <div className="text-center mb-12 space-y-4">
             <Badge variant="outline" className="gap-1">
-              <Sparkles className="h-3 w-3" /> 简单定价
+              <Sparkles className="h-3 w-3" /> {t("badge")}
             </Badge>
-            <h1 className="text-4xl font-bold">选择适合你的套餐</h1>
+            <h1 className="text-4xl font-bold">{t("title")}</h1>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              每个项目消耗 1 个点数，点数永不过期，随时可以充值
+              {t("description")}
             </p>
           </div>
 
@@ -73,14 +64,14 @@ export default function PricingPage() {
                 className={`relative ${plan.popular ? "border-primary border-2" : "border-2"}`}
               >
                 {plan.popular && (
-                  <Badge className="absolute -top-3 left-1/2 -translate-x-1/2">推荐</Badge>
+                  <Badge className="absolute -top-3 left-1/2 -translate-x-1/2">{t("recommended")}</Badge>
                 )}
                 <CardHeader>
                   <CardTitle className="text-xl">{plan.name}</CardTitle>
                   <div className="mt-4">
-                    <span className="text-4xl font-bold">¥{plan.price}</span>
+                    <span className="text-4xl font-bold">{t("currency")}{plan.price}</span>
                     <span className="text-muted-foreground ml-2">
-                      / {plan.projects} 个项目
+                      / {t("projects", { count: plan.projects })}
                     </span>
                   </div>
                   <CardDescription>{plan.description}</CardDescription>
@@ -112,14 +103,14 @@ export default function PricingPage() {
             </div>
             <nav className="flex gap-6 text-sm text-muted-foreground">
               <Link href="/" className="hover:text-foreground transition-colors">
-                首页
+                {nav("home")}
               </Link>
               <Link href="/pricing" className="hover:text-foreground transition-colors">
-                价格
+                {nav("pricing")}
               </Link>
             </nav>
             <p className="text-sm text-muted-foreground">
-              © 2024 VibeGuide. All rights reserved.
+              {footer("copyright")}
             </p>
           </div>
         </div>

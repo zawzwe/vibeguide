@@ -5,6 +5,7 @@ export const projects = pgTable("projects", {
   userId: uuid("user_id").notNull(),
   title: varchar("title", { length: 255 }),
   description: text("description").notNull(),
+  locale: varchar("locale", { length: 10 }).default("zh").notNull(),
   qa: jsonb("qa").$type<{ question: string; answer: string }[]>(),
   documents: jsonb("documents").$type<Record<string, string>>(),
   status: varchar("status", { length: 20 }).default("draft").notNull(),

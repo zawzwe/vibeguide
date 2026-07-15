@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Loader2 } from "lucide-react";
 
@@ -14,11 +15,13 @@ interface PayButtonProps {
 
 export function PayButton({
   plan,
-  label = "立即购买",
+  label,
   variant = "default",
   size = "lg",
   className,
 }: PayButtonProps) {
+  const t = useTranslations("Pricing");
+  const locale = useLocale();
   const [loading, setLoading] = useState(false);
 
   const handlePay = async () => {
@@ -27,16 +30,16 @@ export function PayButton({
       const res = await fetch("/api/pay/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan }),
+        body: JSON.stringify({ plan, locale }),
       });
       const data = await res.json();
       if (data.payUrl) {
         window.location.href = data.payUrl;
       } else {
-        alert("支付创建失败，请稍后再试");
+        alert(t("paymentError"));
       }
     } catch {
-      alert("支付创建失败，请稍后再试");
+      alert(t("paymentError"));
     } finally {
       setLoading(false);
     }
@@ -47,11 +50,11 @@ export function PayButton({
       {loading ? (
         <>
           <Loader2 className="h-4 w-4 mr-1 animate-spin" />
-          处理中...
+          {t("processing")}
         </>
       ) : (
         <>
-          {label} <ArrowRight className="h-4 w-4 ml-1" />
+          {label ?? t("buyNow")} <ArrowRight className="h-4 w-4 ml-1" />
         </>
       )}
     </Button>

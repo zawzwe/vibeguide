@@ -65,6 +65,14 @@ export function buildPaymentUrl(params: Record<string, string | number>): string
  * Plan configuration: price in CNY and number of project credits.
  */
 export const PRICING_PLANS = {
-  "10": { price: 20, credits: 10, name: "基础版 - 10个项目点数" },
-  "30": { price: 40, credits: 30, name: "专业版 - 30个项目点数" },
+  "10": {
+    price: 20,
+    credits: 10,
+    names: { zh: "基础版 - 10个项目点数", en: "Basic - 10 project credits" },
+  },
+  "30": {
+    price: 40,
+    credits: 30,
+    names: { zh: "专业版 - 30个项目点数", en: "Pro - 30 project credits" },
+  },
 } as const;

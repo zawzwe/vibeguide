@@ -14,7 +14,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { description } = await request.json();
+    const { description, locale: requestedLocale } = await request.json();
+    const locale = requestedLocale === "en" ? "en" : "zh";
 
     if (!description || description.trim().length < 10) {
       return NextResponse.json(
@@ -33,7 +34,17 @@ export async function POST(request: NextRequest) {
       messages: [
         {
           role: "system",
-          content: `你是一个专业的技术需求分析师。你的任务是分析用户的项目描述，提出3-5个关键问题来帮助深入理解需求。这些问题应该覆盖：
+          content: locale === "en" ? `You are an experienced technical requirements analyst. Analyze the user's project description and ask 3-5 focused questions that clarify:
+1. Target users and primary scenarios
+2. Core feature scope and boundaries
+3. Technology preferences or constraints
+4. Data management requirements
+5. Non-functional requirements such as performance and security
+
+Return only a valid JSON array of question strings, for example:
+["Question 1", "Question 2", "Question 3"]
+
+Ask every question in English. Do not include markdown or any other text.` : `你是一个专业的技术需求分析师。你的任务是分析用户的项目描述，提出3-5个关键问题来帮助深入理解需求。这些问题应该覆盖：
 1. 目标用户和用户场景
 2. 核心功能边界
 3. 技术栈偏好
@@ -47,7 +58,9 @@ export async function POST(request: NextRequest) {
         },
         {
           role: "user",
-          content: `请分析以下项目描述，提出3-5个深入的需求问题：\n\n${description}`,
+          content: locale === "en"
+            ? `Analyze the following project description and ask 3-5 focused requirements questions in English:\n\n${description}`
+            : `请分析以下项目描述，提出3-5个深入的需求问题：\n\n${description}`,
         },
       ],
       stream: false,

@@ -21,7 +21,7 @@ export async function PUT(
     }
 
     const body = await request.json();
-    const { description, qa, documents, title } = body;
+    const { description, qa, documents, title, locale } = body;
 
     const db = getDb();
 
@@ -43,6 +43,7 @@ export async function PUT(
     if (qa !== undefined) updateData.qa = qa;
     if (documents !== undefined) updateData.documents = documents;
     if (title !== undefined) updateData.title = title;
+    if (locale === "zh" || locale === "en") updateData.locale = locale;
 
     await db
       .update(projects)

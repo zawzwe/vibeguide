@@ -3,20 +3,28 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { createClient } from "@/lib/supabase/server";
 import { getDb, credits } from "@/db";
 import { eq } from "drizzle-orm";
-import { redirect } from "next/navigation";
-import Link from "next/link";
+import { getTranslations } from "next-intl/server";
+import { Link, redirect } from "@/i18n/navigation";
 import { ProjectWizard } from "@/components/project-wizard";
 import { isAdmin } from "@/lib/admin";
+import type { AppLocale } from "@/i18n/routing";
 
 export const dynamic = "force-dynamic";
 
-export default async function NewProjectPage() {
+export default async function NewProjectPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const projectLocale: AppLocale = locale === "en" ? "en" : "zh";
+  const t = await getTranslations("Dashboard.newProject");
   const supabase = await createClient();
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
 
   if (!user) {
-    redirect("/auth/login");
+    return redirect({ href: "/auth/login", locale: projectLocale });
   }
 
   const admin = isAdmin(user.email);
@@ -33,25 +41,25 @@ export default async function NewProjectPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-bold">创建新项目</h1>
+          <h1 className="text-2xl font-bold">{t("title")}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            使用 AI Agent 辅助你完成专业的项目需求分析
+            {t("description")}
           </p>
         </div>
 
         <Card className="max-w-2xl">
           <CardHeader>
-            <CardTitle>项目点数不足</CardTitle>
+            <CardTitle>{t("insufficientTitle")}</CardTitle>
             <CardDescription>
-              你当前没有可用项目点数，请先充值后再创建新项目。
+              {t("insufficientDescription")}
             </CardDescription>
           </CardHeader>
           <CardContent className="flex items-center gap-3">
             <Button asChild>
-              <Link href="/pricing">去充值</Link>
+              <Link href="/pricing">{t("topUp")}</Link>
             </Button>
             <Button variant="outline" asChild>
-              <Link href="/projects">返回我的项目</Link>
+              <Link href="/projects">{t("back")}</Link>
             </Button>
           </CardContent>
         </Card>
@@ -62,12 +70,12 @@ export default async function NewProjectPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">创建新项目</h1>
+        <h1 className="text-2xl font-bold">{t("title")}</h1>
         <p className="text-muted-foreground text-sm mt-1">
-          使用 AI Agent 辅助你完成专业的项目需求分析
+          {t("description")}
         </p>
       </div>
-      <ProjectWizard userId={user.sub} />
+      <ProjectWizard locale={projectLocale} />
     </div>
   );
 }

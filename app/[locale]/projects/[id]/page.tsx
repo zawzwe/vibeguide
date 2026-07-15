@@ -1,24 +1,29 @@
 import { createClient } from "@/lib/supabase/server";
 import { getDb, projects } from "@/db";
 import { eq, and } from "drizzle-orm";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
+import { redirect } from "@/i18n/navigation";
 import { ProjectWizard } from "@/components/project-wizard";
+import type { AppLocale } from "@/i18n/routing";
 
 export const dynamic = "force-dynamic";
 
 interface Props {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string; locale: string }>;
 }
 
 export default async function ProjectDetailPage({ params }: Props) {
-  const { id } = await params;
+  const { id, locale: localeParam } = await params;
+  const locale: AppLocale = localeParam === "en" ? "en" : "zh";
+  const t = await getTranslations("Dashboard.detail");
 
   const supabase = await createClient();
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
 
   if (!user) {
-    redirect("/auth/login");
+    return redirect({ href: "/auth/login", locale });
   }
 
   const db = getDb();
@@ -42,15 +47,15 @@ export default async function ProjectDetailPage({ params }: Props) {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">{project.title || "项目详情"}</h1>
+        <h1 className="text-2xl font-bold">{project.title || t("fallbackTitle")}</h1>
         <p className="text-muted-foreground text-sm mt-1">
-          查看和编辑你的项目文档
+          {t("description")}
         </p>
       </div>
       <ProjectWizard
         initialData={initialData}
         projectId={project.id}
-        userId={user.sub}
+        locale={(project.locale === "en" ? "en" : "zh") as AppLocale}
       />
     </div>
   );

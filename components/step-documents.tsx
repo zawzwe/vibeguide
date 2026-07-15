@@ -8,6 +8,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { FileText, Download, Eye, Code, ArrowLeft, Save, Package } from "lucide-react";
+import type { AppLocale } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 interface QA {
   question: string;
@@ -22,15 +24,10 @@ interface StepDocumentsProps {
   onBack: () => void;
   projectId?: string;
   isSaving?: boolean;
+  locale: AppLocale;
 }
 
-const docTypes = [
-  { key: "journey-map", label: "用户旅程地图" },
-  { key: "prd", label: "产品需求PRD" },
-  { key: "frontend", label: "前端设计文档" },
-  { key: "backend", label: "后端设计文档" },
-  { key: "database", label: "数据库设计" },
-];
+const docTypeKeys = ["journey-map", "prd", "frontend", "backend", "database"] as const;
 
 function formatMarkdown(markdown: string) {
   return markdown
@@ -48,11 +45,20 @@ export function StepDocuments({
   onBack,
   projectId,
   isSaving,
+  locale,
 }: StepDocumentsProps) {
+  const t = useTranslations("Wizard.documents");
+  const docTypes = [
+    { key: "journey-map", label: t("types.journey") },
+    { key: "prd", label: t("types.prd") },
+    { key: "frontend", label: t("types.frontend") },
+    { key: "backend", label: t("types.backend") },
+    { key: "database", label: t("types.database") },
+  ];
   const [documents, setDocuments] = useState<Record<string, string>>(initialDocuments);
   const [loading, setLoading] = useState(Object.keys(initialDocuments).length === 0);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState(docTypes[0].key);
+  const [activeTab, setActiveTab] = useState<(typeof docTypeKeys)[number]>(docTypeKeys[0]);
   const [viewMode, setViewMode] = useState<"markdown" | "preview">("preview");
 
   useEffect(() => {
@@ -63,20 +69,20 @@ export function StepDocuments({
         const res = await fetch("/api/ai/documents", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ description, qa }),
+          body: JSON.stringify({ description, qa, locale }),
         });
-        if (!res.ok) throw new Error("Failed to generate documents");
+        if (!res.ok) throw new Error(t("generationFailed"));
         const data = await res.json();
         setDocuments(data.documents || {});
       } catch (e) {
-        setError(e instanceof Error ? e.message : "Failed to generate documents");
+        setError(e instanceof Error ? e.message : t("generationFailed"));
       } finally {
         setLoading(false);
       }
     }
 
     fetchDocuments();
-  }, [description, qa, initialDocuments]);
+  }, [description, qa, initialDocuments, locale, t]);
 
   const handleDownloadSingle = (key: string) => {
     const content = documents[key];
@@ -104,20 +110,20 @@ export function StepDocuments({
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "documents.zip";
+      a.download = t("zipName");
       a.click();
       URL.revokeObjectURL(url);
       return;
     }
-    window.open(`/api/projects/${projectId}/download-zip`, "_blank");
+    window.open(`/api/projects/${projectId}/download-zip?locale=${locale}`, "_blank");
   };
 
   if (loading) {
     return (
       <Card>
         <CardHeader>
-          <CardTitle>正在生成文档...</CardTitle>
-          <CardDescription>AI 正在为你生成专业的开发文档，请稍候</CardDescription>
+          <CardTitle>{t("generating")}</CardTitle>
+          <CardDescription>{t("generatingDescription")}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           {docTypes.map((doc) => (
@@ -135,12 +141,12 @@ export function StepDocuments({
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="text-red-500">生成失败</CardTitle>
+          <CardTitle className="text-red-500">{t("generationFailed")}</CardTitle>
           <CardDescription>{error}</CardDescription>
         </CardHeader>
         <CardContent>
           <Button variant="outline" onClick={() => window.location.reload()}>
-            重试
+            {t("retry")}
           </Button>
         </CardContent>
       </Card>
@@ -157,8 +163,8 @@ export function StepDocuments({
             <div className="flex items-center gap-2">
               <FileText className="h-5 w-5 text-primary" />
               <div>
-                <CardTitle>生成的文档</CardTitle>
-                <CardDescription>AI 已为你生成了 5 份专业开发文档</CardDescription>
+                <CardTitle>{t("title")}</CardTitle>
+                <CardDescription>{t("description")}</CardDescription>
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -169,11 +175,11 @@ export function StepDocuments({
               >
                 {viewMode === "markdown" ? (
                   <>
-                    <Eye className="h-4 w-4 mr-1" /> 预览
+                    <Eye className="h-4 w-4 mr-1" /> {t("preview")}
                   </>
                 ) : (
                   <>
-                    <Code className="h-4 w-4 mr-1" /> 源码
+                    <Code className="h-4 w-4 mr-1" /> {t("source")}
                   </>
                 )}
               </Button>
@@ -183,16 +189,19 @@ export function StepDocuments({
                 onClick={() => handleDownloadSingle(activeTab)}
                 disabled={!documents[activeTab]}
               >
-                <Download className="h-4 w-4 mr-1" /> 下载当前
+                <Download className="h-4 w-4 mr-1" /> {t("downloadCurrent")}
               </Button>
               <Button variant="outline" size="sm" onClick={handleDownloadZip}>
-                <Package className="h-4 w-4 mr-1" /> ZIP 下载
+                <Package className="h-4 w-4 mr-1" /> {t("downloadZip")}
               </Button>
             </div>
           </div>
         </CardHeader>
         <CardContent>
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <Tabs
+            value={activeTab}
+            onValueChange={(value) => setActiveTab(value as (typeof docTypeKeys)[number])}
+          >
             <TabsList className="w-full justify-start overflow-x-auto">
               {docTypes.map((doc) => (
                 <TabsTrigger key={doc.key} value={doc.key} className="text-sm">
@@ -201,7 +210,7 @@ export function StepDocuments({
               ))}
             </TabsList>
             {docTypes.map((doc) => {
-              const content = formatMarkdown(documents[doc.key] || "暂无内容");
+              const content = formatMarkdown(documents[doc.key] || t("empty"));
               return (
                 <TabsContent key={doc.key} value={doc.key} className="mt-4">
                   <div className="min-h-[520px] max-h-[760px] overflow-auto rounded-2xl border bg-gradient-to-br from-background via-background to-muted/20 p-6 shadow-inner">
@@ -244,11 +253,11 @@ export function StepDocuments({
 
       <div className="flex justify-between">
         <Button variant="outline" onClick={onBack}>
-          <ArrowLeft className="h-4 w-4 mr-1" /> 上一步
+          <ArrowLeft className="h-4 w-4 mr-1" /> {t("back")}
         </Button>
         <Button onClick={() => onSave(documents)} disabled={!hasAllDocs || isSaving}>
           <Save className="h-4 w-4 mr-1" />
-          {isSaving ? "保存中..." : "保存项目"}
+          {isSaving ? t("saving") : t("save")}
         </Button>
       </div>
     </div>

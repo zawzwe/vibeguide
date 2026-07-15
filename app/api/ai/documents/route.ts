@@ -112,6 +112,109 @@ const DOC_TYPES = [
   },
 ];
 
+const EN_DOC_TYPES = [
+  {
+    key: "journey-map",
+    title: "User Journey Map",
+    prompt: `You are a senior UX strategist. Create a clear, polished user journey map from the project description and requirements Q&A.
+
+Requirements:
+- Write entirely in English using Markdown
+- Use #, ## and ### headings consistently
+- Prefer concise bullets and readable tables over long paragraphs
+- Do not output HTML or <br> tags
+
+Use this structure:
+1. Document overview
+2. User personas
+3. Core scenarios
+4. Journey stages: Awareness, Consideration, Onboarding, Usage and Advocacy
+5. Pain points and opportunities
+6. Service blueprint highlights
+7. Conclusions and recommendations`,
+  },
+  {
+    key: "prd",
+    title: "Product Requirements Document",
+    prompt: `You are a senior product manager. Create an implementation-ready product requirements document from the project description and requirements Q&A.
+
+Requirements:
+- Write entirely in English using Markdown
+- Use #, ## and ### headings consistently
+- Use concise bullets, numbered lists and tables where appropriate
+- Do not output HTML or <br> tags
+
+Use this structure:
+1. Product overview and vision
+2. Target users and use cases
+3. Core problems and proposed solution
+4. Functional requirements grouped by P0, P1 and P2
+5. Non-functional requirements
+6. Acceptance criteria
+7. Risks and assumptions
+8. Milestones and delivery recommendations`,
+  },
+  {
+    key: "frontend",
+    title: "Frontend Design Document",
+    prompt: `You are a senior frontend architect. Create a clear frontend design document from the project description and requirements Q&A.
+
+Requirements:
+- Write entirely in English using Markdown
+- Use #, ## and ### headings consistently
+- Prefer concise sections, lists and tables
+- Do not output HTML or <br> tags
+
+Use this structure:
+1. Recommended technology stack
+2. Pages and route design
+3. Component architecture and directory structure
+4. State management
+5. Responsive behavior and interactions
+6. Performance strategy
+7. Implementation recommendations`,
+  },
+  {
+    key: "backend",
+    title: "Backend Design Document",
+    prompt: `You are a senior backend architect. Create a clear backend design document from the project description and requirements Q&A.
+
+Requirements:
+- Write entirely in English using Markdown
+- Use #, ## and ### headings consistently
+- Keep each section concise and use tables for API definitions where helpful
+- Do not output HTML or <br> tags
+
+Use this structure:
+1. Recommended technology stack
+2. System architecture overview
+3. API design
+4. Data and business flows
+5. Authentication and authorization
+6. Error handling and observability
+7. Deployment and operations`,
+  },
+  {
+    key: "database",
+    title: "Database Design Document",
+    prompt: `You are a senior database architect. Create a clear database design document from the project description and requirements Q&A.
+
+Requirements:
+- Write entirely in English using Markdown
+- Use #, ## and ### headings consistently
+- Present core schemas in readable tables
+- Do not output HTML or <br> tags
+
+Use this structure:
+1. Database recommendation
+2. Entity relationship overview
+3. Core table schemas
+4. Data dictionary
+5. Indexing and query optimization
+6. Migration and backup strategy`,
+  },
+];
+
 export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
@@ -124,7 +227,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { description, qa } = await request.json();
+    const { description, qa, locale: requestedLocale } = await request.json();
+    const locale = requestedLocale === "en" ? "en" : "zh";
 
     if (!description) {
       return NextResponse.json({ error: "Description required" }, { status: 400 });
@@ -136,14 +240,17 @@ export async function POST(request: NextRequest) {
           .join("\n\n")
       : "";
 
-    const userPrompt = `项目描述：\n${description}\n\n需求分析问答：\n${qaText}`;
+    const userPrompt = locale === "en"
+      ? `Project description:\n${description}\n\nRequirements Q&A:\n${qaText}`
+      : `项目描述：\n${description}\n\n需求分析问答：\n${qaText}`;
+    const docTypes = locale === "en" ? EN_DOC_TYPES : DOC_TYPES;
 
     const openai = new OpenAI({
       baseURL: "https://api.deepseek.com",
       apiKey: process.env.DEEPSEEK_API_KEY!,
     });
 
-    const docPromises = DOC_TYPES.map(async (doc) => {
+    const docPromises = docTypes.map(async (doc) => {
       try {
         const completion = await openai.chat.completions.create({
           model: "deepseek-v4-flash",
@@ -163,7 +270,9 @@ export async function POST(request: NextRequest) {
         console.error(`Failed to generate ${doc.key}:`, err);
         return {
           key: doc.key,
-          content: `# ${doc.title}\n\n生成失败，请重试。\n\n错误：${err instanceof Error ? err.message : "未知错误"}`,
+          content: locale === "en"
+            ? `# ${doc.title}\n\nGeneration failed. Please try again.\n\nError: ${err instanceof Error ? err.message : "Unknown error"}`
+            : `# ${doc.title}\n\n生成失败，请重试。\n\n错误：${err instanceof Error ? err.message : "未知错误"}`,
         };
       }
     });

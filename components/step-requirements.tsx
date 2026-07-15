@@ -13,7 +13,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ArrowRight, Brain, AlertCircle } from "lucide-react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
+import type { AppLocale } from "@/i18n/routing";
 
 interface QA {
   question: string;
@@ -25,6 +27,7 @@ interface StepRequirementsProps {
   initialQA: QA[];
   onNext: (qa: QA[]) => void;
   onBack: () => void;
+  locale: AppLocale;
 }
 
 export function StepRequirements({
@@ -32,7 +35,9 @@ export function StepRequirements({
   initialQA,
   onNext,
   onBack,
+  locale,
 }: StepRequirementsProps) {
+  const t = useTranslations("Wizard.requirements");
   const [questions, setQuestions] = useState<string[]>(
     initialQA.map((qa) => qa.question)
   );
@@ -56,20 +61,20 @@ export function StepRequirements({
         const res = await fetch("/api/ai/questions", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ description }),
+          body: JSON.stringify({ description, locale }),
         });
-        if (!res.ok) throw new Error("Failed to generate questions");
+        if (!res.ok) throw new Error(t("loadError"));
         const data = await res.json();
         setQuestions(data.questions || []);
       } catch (e) {
-        setError(e instanceof Error ? e.message : "Failed to load questions");
+        setError(e instanceof Error ? e.message : t("loadError"));
       } finally {
         setLoading(false);
       }
     }
 
     fetchQuestions();
-  }, [description, initialQA]);
+  }, [description, initialQA, locale, t]);
 
   const allAnswered = questions.every(
     (_, i) => (answers[i] || "").trim().length > 0
@@ -108,10 +113,10 @@ export function StepRequirements({
         <CardHeader>
           <div className="flex items-center gap-2">
             <Brain className="h-5 w-5 text-primary" />
-            <CardTitle>深入需求分析</CardTitle>
+            <CardTitle>{t("title")}</CardTitle>
           </div>
           <CardDescription>
-            AI 分析了你的项目描述，请回答以下问题以便更准确地生成文档
+            {t("help")}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -137,7 +142,7 @@ export function StepRequirements({
                     {i + 1}. {question}
                   </label>
                   <Textarea
-                    placeholder="输入你的回答..."
+                    placeholder={t("placeholder")}
                     value={answers[i] || ""}
                     onChange={(e) =>
                       setAnswers((prev) => ({ ...prev, [i]: e.target.value }))
@@ -151,14 +156,14 @@ export function StepRequirements({
 
           <div className="flex justify-between">
             <Button variant="outline" onClick={onBack}>
-              上一步
+              {t("back")}
             </Button>
             <Button
               onClick={handleNext}
               disabled={loading || !allAnswered || checkingCredits}
               className="gap-2"
             >
-              {checkingCredits ? "检查中..." : "下一步"}
+              {checkingCredits ? t("checking") : t("next")}
               <ArrowRight className="h-4 w-4" />
             </Button>
           </div>
@@ -168,17 +173,17 @@ export function StepRequirements({
       <Dialog open={showNoCredits} onOpenChange={setShowNoCredits}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>项目点数不足</DialogTitle>
+            <DialogTitle>{t("noCreditsTitle")}</DialogTitle>
             <DialogDescription>
-              你的项目点数已用完，请充值后继续使用。
+              {t("noCreditsDescription")}
             </DialogDescription>
           </DialogHeader>
           <div className="flex gap-3 pt-4">
             <Button variant="outline" onClick={() => setShowNoCredits(false)} className="flex-1">
-              取消
+              {t("cancel")}
             </Button>
             <Button asChild className="flex-1">
-              <Link href="/pricing">去充值</Link>
+              <Link href="/pricing">{t("topUp")}</Link>
             </Button>
           </div>
         </DialogContent>

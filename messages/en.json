@@ -1,0 +1,233 @@
+{
+  "Metadata": {
+    "title": "VibeGuide - AI Development Documentation",
+    "description": "Turn your product ideas into clear, professional development documentation with AI."
+  },
+  "Navigation": {
+    "home": "Home",
+    "pricing": "Pricing",
+    "login": "Log in",
+    "signUp": "Sign up",
+    "logout": "Log out",
+    "language": "Language",
+    "chinese": "中文",
+    "english": "English"
+  },
+  "Home": {
+    "loading": "Loading...",
+    "hero": {
+      "badge": "AI powered",
+      "titleLine1": "Turn your idea into",
+      "titleLine2": "professional development docs",
+      "description": "VibeGuide helps you move from requirements to technical design in minutes, so you can spend more time building.",
+      "learnMore": "Learn more",
+      "getStarted": "Get started"
+    },
+    "features": {
+      "title": "A complete documentation set in one workflow",
+      "description": "Cover every critical stage, from user journeys to database design.",
+      "journey": {"title": "User journey map", "description": "Visualize the complete product experience and identify user needs and pain points."},
+      "prd": {"title": "Product requirements", "description": "Create a structured PRD with clear scope, priorities, and acceptance criteria."},
+      "frontend": {"title": "Frontend design", "description": "Plan components, state management, routes, and the frontend architecture."},
+      "backend": {"title": "Backend design", "description": "Define APIs, business logic, data flows, and service architecture."},
+      "database": {"title": "Database design", "description": "Generate an ER overview, table structures, and an indexing strategy."},
+      "export": {"title": "One-click export", "description": "Download individual Markdown files or export the complete set as a ZIP archive."}
+    },
+    "workflow": {
+      "title": "From idea to documentation in three steps",
+      "description": "A guided AI workflow turns your description into implementation-ready documents.",
+      "step1": {"title": "1. Describe your project", "description": "Explain your product idea and requirements in your own words."},
+      "step2": {"title": "2. Clarify the requirements", "description": "Answer focused questions that help define the scope and key decisions."},
+      "step3": {"title": "3. Generate the documents", "description": "Create five professional documents that you can review, edit, and download."}
+    },
+    "cta": {"title": "Ready to get started?", "description": "Join developers who use AI to turn product ideas into clear technical plans."},
+    "pricing": {
+      "title": "Simple, transparent pricing",
+      "description": "Choose the number of project credits you need. Credits never expire.",
+      "currency": "CNY ¥",
+      "basicName": "Basic",
+      "basicDescription": "A practical starting point for solo developers",
+      "proName": "Pro",
+      "proDescription": "Best for builders working across multiple projects",
+      "projects": "{count} projects",
+      "basicFeatures": ["Complete docs for 10 projects", "5 document types", "Markdown downloads", "ZIP batch export", "AI requirements analysis"],
+      "proFeatures": ["Complete docs for 30 projects", "5 document types", "Markdown downloads", "ZIP batch export", "AI requirements analysis", "Priority support"],
+      "buyNow": "Buy now",
+      "recommended": "Recommended"
+    },
+    "stats": {
+      "documents": "Documents generated",
+      "developers": "Active developers",
+      "analyses": "AI analyses",
+      "satisfaction": "User satisfaction"
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "subtitle": "Everything you need to know about VibeGuide",
+      "items": [
+        {"q": "What is VibeGuide?", "a": "VibeGuide is an AI documentation platform for developers and product builders. Describe your idea and it generates a user journey map, PRD, frontend design, backend design, and database design."},
+        {"q": "How do I get started?", "a": "Create an account, start a project, and describe what you want to build. VibeGuide will guide you through requirements analysis before generating your documents."},
+        {"q": "How long does document generation take?", "a": "Most projects finish in one to three minutes, depending on complexity. The five documents are generated in parallel."},
+        {"q": "Can I download the documents?", "a": "Yes. Download any document as Markdown, or export the complete project as a ZIP archive."},
+        {"q": "How do project credits work?", "a": "Each generated project uses one credit. The current checkout is processed in CNY through Alipay."}
+      ]
+    },
+    "footer": {"features": "Features", "copyright": "© 2026 VibeGuide. All rights reserved."}
+  },
+  "Pricing": {
+    "badge": "Simple pricing",
+    "title": "Choose the plan that fits your work",
+    "description": "Each generated project uses one credit. Credits never expire and you can top up at any time.",
+    "currency": "CNY ¥",
+    "recommended": "Recommended",
+    "projects": "{count} projects",
+    "buyNow": "Buy now",
+    "processing": "Processing...",
+    "paymentError": "We couldn't start the payment. Please try again.",
+    "plans": {
+      "basic": {"name": "Basic", "description": "A practical starting point for solo developers", "features": ["Complete docs for 10 projects", "All 5 document types", "Markdown downloads", "ZIP batch export", "AI requirements analysis"]},
+      "pro": {"name": "Pro", "description": "Best for builders working across multiple projects", "features": ["Complete docs for 30 projects", "All 5 document types", "Markdown downloads", "ZIP batch export", "AI requirements analysis", "Priority support"]}
+    }
+  },
+  "Auth": {
+    "genericError": "Something went wrong. Please try again.",
+    "email": "Email",
+    "password": "Password",
+    "repeatPassword": "Repeat password",
+    "login": {
+      "title": "Log in",
+      "description": "Enter your email and password to access your account.",
+      "forgotPassword": "Forgot password?",
+      "submitting": "Logging in...",
+      "submit": "Log in",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up"
+    },
+    "signUp": {
+      "title": "Create an account",
+      "description": "Sign up to start creating project documentation.",
+      "passwordMismatch": "The passwords do not match.",
+      "submitting": "Creating account...",
+      "submit": "Sign up",
+      "haveAccount": "Already have an account?",
+      "login": "Log in"
+    },
+    "forgot": {
+      "sentTitle": "Email sent",
+      "sentSubtitle": "Check your inbox for a password reset link.",
+      "sentDescription": "If an account exists for this email, we've sent a link that you can use to reset your password.",
+      "title": "Reset your password",
+      "description": "Enter your email and we'll send you a password reset link.",
+      "sending": "Sending...",
+      "send": "Send reset email",
+      "haveAccount": "Remembered your password?",
+      "backToLogin": "Back to login"
+    },
+    "update": {
+      "title": "Choose a new password",
+      "description": "Enter the new password for your account.",
+      "newPassword": "New password",
+      "placeholder": "Enter a new password",
+      "saving": "Saving...",
+      "save": "Save new password"
+    },
+    "success": {
+      "title": "Account created",
+      "subtitle": "Your account is ready to use.",
+      "description": "Return to the login page to access VibeGuide.",
+      "backToLogin": "Back to login"
+    },
+    "error": {
+      "title": "Sorry, something went wrong",
+      "code": "Error: {message}",
+      "unspecified": "An unspecified error occurred."
+    }
+  },
+  "Dashboard": {
+    "navigation": {"projects": "My projects", "newProject": "New project", "account": "Account"},
+    "projects": {
+      "title": "My projects",
+      "description": "Manage your project documentation",
+      "newProject": "New project",
+      "emptyTitle": "No projects yet",
+      "emptyDescription": "Create your first project and let AI turn your idea into professional development documentation.",
+      "emptyAction": "Create a project",
+      "unnamed": "Untitled project",
+      "completed": "Completed",
+      "draft": "Draft",
+      "justNow": "Just now",
+      "minutesAgo": "{count} minutes ago",
+      "hoursAgo": "{count} hours ago",
+      "daysAgo": "{count} days ago"
+    },
+    "newProject": {
+      "title": "Create a new project",
+      "description": "Use the AI assistant to clarify your requirements and create a technical plan.",
+      "insufficientTitle": "No project credits remaining",
+      "insufficientDescription": "You need a project credit before you can create another project.",
+      "topUp": "Get credits",
+      "back": "Back to projects"
+    },
+    "detail": {"fallbackTitle": "Project details", "description": "Review and edit your project documentation"},
+    "account": {
+      "title": "Account",
+      "description": "Manage your account and project credits",
+      "unknown": "Unknown",
+      "profileTitle": "Profile",
+      "adminBadge": "Internal administrator",
+      "profileDescription": "Your account information",
+      "email": "Email",
+      "creditsTitle": "Project credits",
+      "unlimited": "Unlimited",
+      "adminDescription": "Administrator accounts do not use project credits.",
+      "creditsDescription": "Each generated project uses one credit.",
+      "remaining": "Credits remaining",
+      "points": "{count} credits",
+      "noCredits": "You have no project credits remaining. Add credits to continue.",
+      "getCredits": "Get credits",
+      "getMoreCredits": "Get more credits"
+    }
+  },
+  "Wizard": {
+    "steps": {"description": "Describe project", "requirements": "Clarify requirements", "documents": "Create documents"},
+    "description": {
+      "title": "Describe your project",
+      "help": "Share as much detail as possible. The AI will use your description to create professional development documentation.",
+      "placeholder": "For example: I want to build an online bookstore where customers can browse and search for books, add items to a cart, and place orders. Administrators need to manage inventory and orders...",
+      "characters": "{count} characters entered",
+      "minimum": "Minimum {count} characters",
+      "next": "Continue"
+    },
+    "requirements": {
+      "title": "Clarify the requirements",
+      "help": "Answer these focused questions so the AI can create more accurate documentation.",
+      "placeholder": "Enter your answer...",
+      "back": "Back",
+      "checking": "Checking...",
+      "next": "Continue",
+      "noCreditsTitle": "No project credits remaining",
+      "noCreditsDescription": "Add a project credit before generating the documents.",
+      "cancel": "Cancel",
+      "topUp": "Get credits",
+      "loadError": "We couldn't generate the questions. Please try again."
+    },
+    "documents": {
+      "types": {"journey": "User Journey Map", "prd": "Product Requirements Document", "frontend": "Frontend Design Document", "backend": "Backend Design Document", "database": "Database Design Document"},
+      "generating": "Generating documents...",
+      "generatingDescription": "The AI is creating your project documentation. This may take a moment.",
+      "generationFailed": "Generation failed",
+      "retry": "Try again",
+      "title": "Generated documents",
+      "description": "Your five development documents are ready.",
+      "preview": "Preview",
+      "source": "Source",
+      "downloadCurrent": "Download current",
+      "downloadZip": "Download ZIP",
+      "empty": "No content available",
+      "back": "Back",
+      "saving": "Saving...",
+      "save": "Save project",
+      "zipName": "project-documents.zip"
+    }
+  }
+}

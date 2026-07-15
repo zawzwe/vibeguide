@@ -16,6 +16,7 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const { description, qa, documents, title } = body;
+    const locale = body.locale === "en" ? "en" : "zh";
 
     if (!description) {
       return NextResponse.json(
@@ -35,6 +36,7 @@ export async function POST(request: NextRequest) {
         userId: user.sub,
         title: projectTitle,
         description,
+        locale,
         qa: qa || [],
         documents: documents || {},
         status: "completed",

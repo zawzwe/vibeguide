@@ -1,0 +1,233 @@
+{
+  "Metadata": {
+    "title": "VibeGuide - AI 开发文档平台",
+    "description": "智能 AI 开发文档平台，帮助编程新手轻松生成专业的项目开发文档"
+  },
+  "Navigation": {
+    "home": "首页",
+    "pricing": "价格",
+    "login": "登录",
+    "signUp": "注册",
+    "logout": "退出登录",
+    "language": "语言",
+    "chinese": "中文",
+    "english": "English"
+  },
+  "Home": {
+    "loading": "加载中...",
+    "hero": {
+      "badge": "AI 驱动",
+      "titleLine1": "让 AI 为你的项目",
+      "titleLine2": "生成专业开发文档",
+      "description": "VibeGuide 帮助编程新手在几分钟内完成从需求分析到技术设计的全部文档，让你专注于真正重要的事情——写代码。",
+      "learnMore": "了解更多",
+      "getStarted": "立即开始"
+    },
+    "features": {
+      "title": "一键生成全套开发文档",
+      "description": "从用户旅程到数据库设计，覆盖软件开发的每一个关键环节",
+      "journey": {"title": "用户旅程地图", "description": "可视化用户使用产品的完整流程，帮助团队理解用户需求与痛点"},
+      "prd": {"title": "产品需求 PRD", "description": "结构化的产品需求文档，明确功能边界与验收标准"},
+      "frontend": {"title": "前端设计文档", "description": "包含组件树、状态管理、路由设计的前端架构方案"},
+      "backend": {"title": "后端设计文档", "description": "API 设计、业务逻辑、服务架构的完整后端方案"},
+      "database": {"title": "数据库设计", "description": "ER 图、表结构、索引策略的完整数据库设计方案"},
+      "export": {"title": "一键导出文档", "description": "支持 Markdown 和 ZIP 格式批量导出，方便分享和版本管理"}
+    },
+    "workflow": {
+      "title": "AI 工作流，三步搞定",
+      "description": "简单三步，AI 帮你完成从需求分析到技术文档的全部工作",
+      "step1": {"title": "1. 描述项目", "description": "用自然语言描述你的项目想法和需求，AI 会理解你的意图"},
+      "step2": {"title": "2. 深入需求", "description": "AI 分析你的描述，提出关键问题帮你厘清需求边界"},
+      "step3": {"title": "3. 生成文档", "description": "一键生成 5 份专业开发文档，支持 Markdown 编辑和下载"}
+    },
+    "cta": {"title": "准备好开始了吗？", "description": "加入数千名开发者，用 AI 加速你的项目文档编写"},
+    "pricing": {
+      "title": "简单透明的定价",
+      "description": "选择适合你的套餐，随时可以充值更多",
+      "currency": "¥",
+      "basicName": "基础版",
+      "basicDescription": "适合个人开发者快速上手",
+      "proName": "专业版",
+      "proDescription": "适合有多个项目需求的用户",
+      "projects": "{count} 个项目",
+      "basicFeatures": ["生成 10 个项目的完整文档", "5 种文档类型", "Markdown 下载", "ZIP 批量下载", "AI 需求分析"],
+      "proFeatures": ["生成 30 个项目的完整文档", "5 种文档类型", "Markdown 下载", "ZIP 批量下载", "AI 需求分析", "优先支持"],
+      "buyNow": "立即购买",
+      "recommended": "推荐"
+    },
+    "stats": {
+      "documents": "已生成文档",
+      "developers": "活跃开发者",
+      "analyses": "AI 分析次数",
+      "satisfaction": "用户满意度"
+    },
+    "faq": {
+      "title": "常见问题",
+      "subtitle": "关于 VibeGuide 的常见疑问",
+      "items": [
+        {"q": "VibeGuide 是什么？", "a": "VibeGuide 是一个智能 AI 开发文档平台，专门为编程新手设计。你只需描述你的项目想法，AI 就能自动生成完整的开发文档，包括用户旅程地图、PRD、前端设计、后端设计和数据库设计。"},
+        {"q": "如何开始使用？", "a": "点击「立即开始」按钮，注册账号后即可创建你的第一个项目。在项目向导中描述你的项目，AI 会引导你逐步完成需求分析和文档生成。"},
+        {"q": "生成文档需要多长时间？", "a": "根据项目复杂度，通常在 1-3 分钟内即可完成所有 5 份文档的生成。我们的 AI 会并行处理，确保快速交付。"},
+        {"q": "文档可以下载吗？", "a": "当然可以！你可以下载单个 Markdown 文档，也可以一键打包下载所有文档的 ZIP 压缩包。"},
+        {"q": "如何充值项目点数？", "a": "访问价格页面，选择适合你的套餐（20 元/10 个项目 或 40 元/30 个项目），点击购买后通过支付宝完成充值。"}
+      ]
+    },
+    "footer": {"features": "功能", "copyright": "© 2026 VibeGuide. 保留所有权利。"}
+  },
+  "Pricing": {
+    "badge": "简单定价",
+    "title": "选择适合你的套餐",
+    "description": "每个项目消耗 1 个点数，点数永不过期，随时可以充值",
+    "currency": "¥",
+    "recommended": "推荐",
+    "projects": "{count} 个项目",
+    "buyNow": "立即购买",
+    "processing": "处理中...",
+    "paymentError": "支付创建失败，请稍后再试",
+    "plans": {
+      "basic": {"name": "基础版", "description": "适合个人开发者快速上手", "features": ["生成 10 个项目的完整文档", "5 种文档类型全覆盖", "Markdown 格式下载", "ZIP 批量下载", "AI 需求分析"]},
+      "pro": {"name": "专业版", "description": "适合有多个项目需求的用户", "features": ["生成 30 个项目的完整文档", "5 种文档类型全覆盖", "Markdown 格式下载", "ZIP 批量下载", "AI 需求分析", "优先技术支持"]}
+    }
+  },
+  "Auth": {
+    "genericError": "发生了错误，请稍后再试",
+    "email": "邮箱",
+    "password": "密码",
+    "repeatPassword": "再次输入密码",
+    "login": {
+      "title": "登录",
+      "description": "输入邮箱和密码登录你的账号",
+      "forgotPassword": "忘记密码？",
+      "submitting": "登录中...",
+      "submit": "登录",
+      "noAccount": "还没有账号？",
+      "signUp": "注册"
+    },
+    "signUp": {
+      "title": "注册",
+      "description": "注册完成后即可直接登录使用",
+      "passwordMismatch": "两次输入的密码不一致",
+      "submitting": "注册中...",
+      "submit": "注册",
+      "haveAccount": "已有账号？",
+      "login": "登录"
+    },
+    "forgot": {
+      "sentTitle": "邮件已发送",
+      "sentSubtitle": "请查收重置密码邮件",
+      "sentDescription": "如果你使用邮箱和密码注册过账号，我们已经向你的邮箱发送了重置密码链接。",
+      "title": "重置密码",
+      "description": "输入你的邮箱，我们会发送一封重置密码邮件",
+      "sending": "发送中...",
+      "send": "发送重置邮件",
+      "haveAccount": "已有账号？",
+      "backToLogin": "返回登录"
+    },
+    "update": {
+      "title": "重置密码",
+      "description": "请在下方输入你的新密码",
+      "newPassword": "新密码",
+      "placeholder": "请输入新密码",
+      "saving": "保存中...",
+      "save": "保存新密码"
+    },
+    "success": {
+      "title": "恭喜注册成功",
+      "subtitle": "注册完成后即可直接登录使用",
+      "description": "账号已经创建完成，现在就可以返回登录页登录使用。",
+      "backToLogin": "返回登录页"
+    },
+    "error": {
+      "title": "抱歉，出现了问题",
+      "code": "错误信息：{message}",
+      "unspecified": "发生了未指定的错误。"
+    }
+  },
+  "Dashboard": {
+    "navigation": {"projects": "我的项目", "newProject": "新建项目", "account": "我的"},
+    "projects": {
+      "title": "我的项目",
+      "description": "管理你的所有项目文档",
+      "newProject": "新建项目",
+      "emptyTitle": "还没有项目",
+      "emptyDescription": "你还没有创建任何项目。创建一个新项目，让 AI 帮你生成专业的开发文档。",
+      "emptyAction": "创建新项目",
+      "unnamed": "未命名项目",
+      "completed": "已完成",
+      "draft": "草稿",
+      "justNow": "刚刚",
+      "minutesAgo": "{count} 分钟前",
+      "hoursAgo": "{count} 小时前",
+      "daysAgo": "{count} 天前"
+    },
+    "newProject": {
+      "title": "创建新项目",
+      "description": "使用 AI Agent 辅助你完成专业的项目需求分析",
+      "insufficientTitle": "项目点数不足",
+      "insufficientDescription": "你当前没有可用项目点数，请先充值后再创建新项目。",
+      "topUp": "去充值",
+      "back": "返回我的项目"
+    },
+    "detail": {"fallbackTitle": "项目详情", "description": "查看和编辑你的项目文档"},
+    "account": {
+      "title": "我的",
+      "description": "管理你的账户信息和项目点数",
+      "unknown": "未知",
+      "profileTitle": "个人信息",
+      "adminBadge": "内部管理员",
+      "profileDescription": "你的账户基本信息",
+      "email": "邮箱",
+      "creditsTitle": "项目点数",
+      "unlimited": "无限",
+      "adminDescription": "管理员账户，无需购买点数",
+      "creditsDescription": "每个项目消耗 1 个点数",
+      "remaining": "剩余点数",
+      "points": "{count} 点",
+      "noCredits": "你的项目点数已用完，请充值后继续使用。",
+      "getCredits": "获取点数",
+      "getMoreCredits": "获取更多点数"
+    }
+  },
+  "Wizard": {
+    "steps": {"description": "描述项目", "requirements": "深入需求", "documents": "创建文档"},
+    "description": {
+      "title": "描述你的项目",
+      "help": "尽可能详细地描述你的项目想法，AI 将基于你的描述生成专业的开发文档",
+      "placeholder": "例如：我想开发一个在线书店，用户可以浏览、搜索书籍，加入购物车，下单购买。管理员可以管理书籍库存、处理订单...",
+      "characters": "已输入 {count} 字",
+      "minimum": "最少 {count} 字",
+      "next": "下一步"
+    },
+    "requirements": {
+      "title": "深入需求分析",
+      "help": "AI 分析了你的项目描述，请回答以下问题以便更准确地生成文档",
+      "placeholder": "输入你的回答...",
+      "back": "上一步",
+      "checking": "检查中...",
+      "next": "下一步",
+      "noCreditsTitle": "项目点数不足",
+      "noCreditsDescription": "你的项目点数已用完，请充值后继续使用。",
+      "cancel": "取消",
+      "topUp": "去充值",
+      "loadError": "无法生成问题，请重试"
+    },
+    "documents": {
+      "types": {"journey": "用户旅程地图", "prd": "产品需求PRD", "frontend": "前端设计文档", "backend": "后端设计文档", "database": "数据库设计"},
+      "generating": "正在生成文档...",
+      "generatingDescription": "AI 正在为你生成专业的开发文档，请稍候",
+      "generationFailed": "生成失败",
+      "retry": "重试",
+      "title": "生成的文档",
+      "description": "AI 已为你生成了 5 份专业开发文档",
+      "preview": "预览",
+      "source": "源码",
+      "downloadCurrent": "下载当前",
+      "downloadZip": "ZIP 下载",
+      "empty": "暂无内容",
+      "back": "上一步",
+      "saving": "保存中...",
+      "save": "保存项目",
+      "zipName": "项目文档.zip"
+    }
+  }
+}

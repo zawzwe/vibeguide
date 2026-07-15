@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Suspense } from "react";
 import { SiteHeader } from "@/components/site-header";
+import { getTranslations } from "next-intl/server";
 
 async function ErrorContent({
   searchParams,
@@ -8,27 +9,29 @@ async function ErrorContent({
   searchParams: Promise<{ error: string }>;
 }) {
   const params = await searchParams;
+  const t = await getTranslations("Auth.error");
 
   return (
     <>
       {params?.error ? (
         <p className="text-sm text-muted-foreground">
-          Code error: {params.error}
+          {t("code", { message: params.error })}
         </p>
       ) : (
         <p className="text-sm text-muted-foreground">
-          An unspecified error occurred.
+          {t("unspecified")}
         </p>
       )}
     </>
   );
 }
 
-export default function Page({
+export default async function Page({
   searchParams,
 }: {
   searchParams: Promise<{ error: string }>;
 }) {
+  const t = await getTranslations("Auth.error");
   return (
     <div className="min-h-svh w-full bg-background">
       <SiteHeader />
@@ -38,7 +41,7 @@ export default function Page({
             <Card>
               <CardHeader>
                 <CardTitle className="text-2xl">
-                  Sorry, something went wrong.
+                  {t("title")}
                 </CardTitle>
               </CardHeader>
               <CardContent>

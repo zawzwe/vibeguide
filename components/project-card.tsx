@@ -2,7 +2,8 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
 import { FolderOpen, Clock } from "lucide-react";
 
 interface ProjectCardProps {
@@ -14,10 +15,25 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ id, title, description, status, createdAt }: ProjectCardProps) {
+  const t = useTranslations("Dashboard.projects");
+  const locale = useLocale();
   const router = useRouter();
 
   const date = new Date(createdAt);
-  const timeAgo = getTimeAgo(date);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
+  const timeAgo = diffMins < 1
+    ? t("justNow")
+    : diffMins < 60
+      ? t("minutesAgo", { count: diffMins })
+      : diffHours < 24
+        ? t("hoursAgo", { count: diffHours })
+        : diffDays < 30
+          ? t("daysAgo", { count: diffDays })
+          : new Intl.DateTimeFormat(locale).format(date);
 
   return (
     <Card
@@ -28,10 +44,10 @@ export function ProjectCard({ id, title, description, status, createdAt }: Proje
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-2">
             <FolderOpen className="h-5 w-5 text-primary" />
-            <CardTitle className="text-lg">{title || "未命名项目"}</CardTitle>
+            <CardTitle className="text-lg">{title || t("unnamed")}</CardTitle>
           </div>
           <Badge variant={status === "completed" ? "default" : "secondary"}>
-            {status === "completed" ? "已完成" : "草稿"}
+            {status === "completed" ? t("completed") : t("draft")}
           </Badge>
         </div>
         <CardDescription className="line-clamp-2 mt-2">
@@ -46,18 +62,4 @@ export function ProjectCard({ id, title, description, status, createdAt }: Proje
       </CardContent>
     </Card>
   );
-}
-
-function getTimeAgo(date: Date): string {
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffMins = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMs / 3600000);
-  const diffDays = Math.floor(diffMs / 86400000);
-
-  if (diffMins < 1) return "刚刚";
-  if (diffMins < 60) return `${diffMins} 分钟前`;
-  if (diffHours < 24) return `${diffHours} 小时前`;
-  if (diffDays < 30) return `${diffDays} 天前`;
-  return date.toLocaleDateString("zh-CN");
 }

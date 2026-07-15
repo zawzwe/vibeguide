@@ -12,19 +12,22 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { useSearchParams } from "next/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import { useState } from "react";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const t = useTranslations("Auth");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,9 +42,13 @@ export function LoginForm({
       });
       if (error) throw error;
       // Update this route to redirect to an authenticated route. The user already has an active session.
-      router.push("/protected");
+      const requestedRedirect = searchParams.get("redirect");
+      const redirectTo = requestedRedirect?.startsWith("/") && !requestedRedirect.startsWith("//")
+        ? requestedRedirect
+        : "/projects";
+      router.push(redirectTo);
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "发生了错误，请稍后再试");
+      setError(error instanceof Error ? error.message : t("genericError"));
     } finally {
       setIsLoading(false);
     }
@@ -51,16 +58,16 @@ export function LoginForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">登录</CardTitle>
+          <CardTitle className="text-2xl">{t("login.title")}</CardTitle>
           <CardDescription>
-            输入邮箱和密码登录你的账号
+            {t("login.description")}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t("email")}</Label>
                 <Input
                   id="email"
                   type="email"
@@ -72,12 +79,12 @@ export function LoginForm({
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">{t("password")}</Label>
                   <Link
                     href="/auth/forgot-password"
                     className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                   >
-                    忘记密码？
+                    {t("login.forgotPassword")}
                   </Link>
                 </div>
                 <Input
@@ -90,16 +97,16 @@ export function LoginForm({
               </div>
               {error && <p className="text-sm text-red-500">{error}</p>}
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "登录中..." : "登录"}
+                {isLoading ? t("login.submitting") : t("login.submit")}
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">
-              还没有账号？{" "}
+              {t("login.noAccount")} {" "}
               <Link
                 href="/auth/sign-up"
                 className="underline underline-offset-4"
               >
-                注册
+                {t("login.signUp")}
               </Link>
             </div>
           </form>

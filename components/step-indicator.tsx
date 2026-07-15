@@ -1,17 +1,21 @@
+"use client";
+
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 const steps = [
-  { num: 1, label: "描述项目" },
-  { num: 2, label: "深入需求" },
-  { num: 3, label: "创建文档" },
-];
+  { num: 1, labelKey: "description" },
+  { num: 2, labelKey: "requirements" },
+  { num: 3, labelKey: "documents" },
+] as const;
 
 interface StepIndicatorProps {
   currentStep: number;
 }
 
 export function StepIndicator({ currentStep }: StepIndicatorProps) {
+  const t = useTranslations("Wizard.steps");
   return (
     <div className="flex items-center justify-center gap-0 mb-8">
       {steps.map((step, i) => (
@@ -39,7 +43,7 @@ export function StepIndicator({ currentStep }: StepIndicatorProps) {
                 currentStep >= step.num ? "text-foreground" : "text-muted-foreground"
               )}
             >
-              {step.label}
+              {t(step.labelKey)}
             </span>
           </div>
           {i < steps.length - 1 && (

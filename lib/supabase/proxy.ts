@@ -2,10 +2,11 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { hasEnvVars } from "../utils";
 
-export async function updateSession(request: NextRequest) {
-  let supabaseResponse = NextResponse.next({
-    request,
-  });
+export async function updateSession(
+  request: NextRequest,
+  response = NextResponse.next({ request }),
+) {
+  const supabaseResponse = response;
 
   // If the env vars are not set, skip proxy check. You can remove this
   // once you setup the project.
@@ -27,9 +28,6 @@ export async function updateSession(request: NextRequest) {
           cookiesToSet.forEach(({ name, value }) =>
             request.cookies.set(name, value),
           );
-          supabaseResponse = NextResponse.next({
-            request,
-          });
           cookiesToSet.forEach(({ name, value, options }) =>
             supabaseResponse.cookies.set(name, value, options),
           );
@@ -48,17 +46,19 @@ export async function updateSession(request: NextRequest) {
   const user = data?.claims;
 
   const pathname = request.nextUrl.pathname;
+  const locale = pathname === "/en" || pathname.startsWith("/en/") ? "en" : "zh";
+  const normalizedPathname = pathname.replace(/^\/(?:zh|en)(?=\/|$)/, "") || "/";
   const isPublicRoute =
-    pathname === "/" ||
-    pathname === "/pricing" ||
-    pathname.startsWith("/auth") ||
-    pathname === "/api/pay/notify" ||
-    pathname === "/api/pay/return";
+    normalizedPathname === "/" ||
+    normalizedPathname === "/pricing" ||
+    normalizedPathname.startsWith("/auth") ||
+    normalizedPathname === "/api/pay/notify" ||
+    normalizedPathname === "/api/pay/return";
 
   if (!isPublicRoute && !user) {
     // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone();
-    url.pathname = "/auth/login";
+    url.pathname = locale === "en" ? "/en/auth/login" : "/auth/login";
     return NextResponse.redirect(url);
   }
 

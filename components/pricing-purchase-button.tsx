@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Loader2 } from "lucide-react";
@@ -13,6 +13,8 @@ interface PricingPurchaseButtonProps {
 }
 
 export function PricingPurchaseButton({ plan, className }: PricingPurchaseButtonProps) {
+  const t = useTranslations("Pricing");
+  const locale = useLocale();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -31,17 +33,17 @@ export function PricingPurchaseButton({ plan, className }: PricingPurchaseButton
       const res = await fetch("/api/pay/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ plan }),
+        body: JSON.stringify({ plan, locale }),
       });
 
       const dataRes = await res.json();
       if (dataRes.payUrl) {
         window.location.href = dataRes.payUrl;
       } else {
-        alert("支付创建失败，请稍后再试");
+        alert(t("paymentError"));
       }
     } catch {
-      alert("支付创建失败，请稍后再试");
+      alert(t("paymentError"));
     } finally {
       setLoading(false);
     }
@@ -52,11 +54,11 @@ export function PricingPurchaseButton({ plan, className }: PricingPurchaseButton
       {loading ? (
         <>
           <Loader2 className="h-4 w-4 mr-1 animate-spin" />
-          处理中...
+          {t("processing")}
         </>
       ) : (
         <>
-          立即购买 <ArrowRight className="h-4 w-4 ml-1" />
+          {t("buyNow")} <ArrowRight className="h-4 w-4 ml-1" />
         </>
       )}
     </Button>

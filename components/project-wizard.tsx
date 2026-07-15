@@ -5,7 +5,8 @@ import { StepIndicator } from "@/components/step-indicator";
 import { StepDescription } from "@/components/step-description";
 import { StepRequirements } from "@/components/step-requirements";
 import { StepDocuments } from "@/components/step-documents";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
+import type { AppLocale } from "@/i18n/routing";
 
 interface QA {
   question: string;
@@ -22,13 +23,13 @@ interface WizardData {
 interface ProjectWizardProps {
   initialData?: WizardData;
   projectId?: string;
-  userId: string;
+  locale: AppLocale;
 }
 
 export function ProjectWizard({
   initialData,
   projectId,
-  userId,
+  locale,
 }: ProjectWizardProps) {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(
@@ -61,7 +62,7 @@ export function ProjectWizard({
   const handleSave = async (documents: Record<string, string>) => {
     setIsSaving(true);
     try {
-      const completeData = { ...data, documents };
+      const completeData = { ...data, documents, locale };
 
       if (projectId) {
         // Update existing project
@@ -106,6 +107,7 @@ export function ProjectWizard({
 
       {currentStep === 2 && (
         <StepRequirements
+          locale={locale}
           description={data.description}
           initialQA={data.qa}
           onNext={handleRequirementsNext}
@@ -115,6 +117,7 @@ export function ProjectWizard({
 
       {currentStep === 3 && (
         <StepDocuments
+          locale={locale}
           description={data.description}
           qa={data.qa}
           initialDocuments={data.documents}

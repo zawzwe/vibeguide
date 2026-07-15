@@ -12,14 +12,16 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useLocale, useTranslations } from "next-intl";
+import { Link, useRouter } from "@/i18n/navigation";
 import { useState } from "react";
 
 export function SignUpForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const t = useTranslations("Auth");
+  const locale = useLocale();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
@@ -34,7 +36,7 @@ export function SignUpForm({
     setError(null);
 
     if (password !== repeatPassword) {
-      setError("两次输入的密码不一致");
+      setError(t("signUp.passwordMismatch"));
       setIsLoading(false);
       return;
     }
@@ -44,13 +46,13 @@ export function SignUpForm({
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/protected`,
+          emailRedirectTo: `${window.location.origin}${locale === "en" ? "/en" : ""}/protected`,
         },
       });
       if (error) throw error;
       router.push("/auth/sign-up-success");
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "发生了错误，请稍后再试");
+      setError(error instanceof Error ? error.message : t("genericError"));
     } finally {
       setIsLoading(false);
     }
@@ -60,14 +62,14 @@ export function SignUpForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">注册</CardTitle>
-          <CardDescription>注册完成后即可直接登录使用</CardDescription>
+          <CardTitle className="text-2xl">{t("signUp.title")}</CardTitle>
+          <CardDescription>{t("signUp.description")}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSignUp}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t("email")}</Label>
                 <Input
                   id="email"
                   type="email"
@@ -79,7 +81,7 @@ export function SignUpForm({
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">{t("password")}</Label>
                 </div>
                 <Input
                   id="password"
@@ -91,7 +93,7 @@ export function SignUpForm({
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="repeat-password">Repeat Password</Label>
+                  <Label htmlFor="repeat-password">{t("repeatPassword")}</Label>
                 </div>
                 <Input
                   id="repeat-password"
@@ -103,13 +105,13 @@ export function SignUpForm({
               </div>
               {error && <p className="text-sm text-red-500">{error}</p>}
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? "注册中..." : "注册"}
+                {isLoading ? t("signUp.submitting") : t("signUp.submit")}
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">
-              已有账号？{" "}
+              {t("signUp.haveAccount")} {" "}
               <Link href="/auth/login" className="underline underline-offset-4">
-                登录
+                {t("signUp.login")}
               </Link>
             </div>
           </form>

@@ -12,13 +12,16 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { useState } from "react";
 
 export function ForgotPasswordForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
+  const t = useTranslations("Auth");
+  const locale = useLocale();
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -33,12 +36,12 @@ export function ForgotPasswordForm({
     try {
       // The url which will be included in the email. This URL needs to be configured in your redirect URLs in the Supabase dashboard at https://supabase.com/dashboard/project/_/auth/url-configuration
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/update-password`,
+        redirectTo: `${window.location.origin}${locale === "en" ? "/en" : ""}/auth/update-password`,
       });
       if (error) throw error;
       setSuccess(true);
     } catch (error: unknown) {
-      setError(error instanceof Error ? error.message : "An error occurred");
+      setError(error instanceof Error ? error.message : t("genericError"));
     } finally {
       setIsLoading(false);
     }
@@ -49,28 +52,28 @@ export function ForgotPasswordForm({
       {success ? (
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl">邮件已发送</CardTitle>
-            <CardDescription>请查收重置密码邮件</CardDescription>
+            <CardTitle className="text-2xl">{t("forgot.sentTitle")}</CardTitle>
+            <CardDescription>{t("forgot.sentSubtitle")}</CardDescription>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">
-              如果你使用邮箱和密码注册过账号，我们已经向你的邮箱发送了重置密码链接。
+              {t("forgot.sentDescription")}
             </p>
           </CardContent>
         </Card>
       ) : (
         <Card>
           <CardHeader>
-            <CardTitle className="text-2xl">重置密码</CardTitle>
+            <CardTitle className="text-2xl">{t("forgot.title")}</CardTitle>
             <CardDescription>
-              输入你的邮箱，我们会发送一封重置密码邮件
+              {t("forgot.description")}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleForgotPassword}>
               <div className="flex flex-col gap-6">
                 <div className="grid gap-2">
-                  <Label htmlFor="email">邮箱</Label>
+                  <Label htmlFor="email">{t("email")}</Label>
                   <Input
                     id="email"
                     type="email"
@@ -82,16 +85,16 @@ export function ForgotPasswordForm({
                 </div>
                 {error && <p className="text-sm text-red-500">{error}</p>}
                 <Button type="submit" className="w-full" disabled={isLoading}>
-                  {isLoading ? "发送中..." : "发送重置邮件"}
+                  {isLoading ? t("forgot.sending") : t("forgot.send")}
                 </Button>
               </div>
               <div className="mt-4 text-center text-sm">
-                已有账号？{" "}
+                {t("forgot.haveAccount")} {" "}
                 <Link
                   href="/auth/login"
                   className="underline underline-offset-4"
                 >
-                  返回登录
+                  {t("forgot.backToLogin")}
                 </Link>
               </div>
             </form>

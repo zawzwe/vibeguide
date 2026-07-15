@@ -4,18 +4,26 @@ import { eq, desc } from "drizzle-orm";
 import { ProjectList } from "@/components/project-list";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
-import Link from "next/link";
-import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
+import { Link, redirect } from "@/i18n/navigation";
+import type { AppLocale } from "@/i18n/routing";
 
 export const dynamic = "force-dynamic";
 
-export default async function ProjectsPage() {
+export default async function ProjectsPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale: localeParam } = await params;
+  const locale: AppLocale = localeParam === "en" ? "en" : "zh";
+  const t = await getTranslations("Dashboard.projects");
   const supabase = await createClient();
   const { data } = await supabase.auth.getClaims();
   const user = data?.claims;
 
   if (!user) {
-    redirect("/auth/login");
+    return redirect({ href: "/auth/login", locale });
   }
 
   const db = getDb();
@@ -43,15 +51,15 @@ export default async function ProjectsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">我的项目</h1>
+          <h1 className="text-2xl font-bold">{t("title")}</h1>
           <p className="text-muted-foreground text-sm mt-1">
-            管理你的所有项目文档
+            {t("description")}
           </p>
         </div>
         <Button asChild>
           <Link href="/projects/new">
             <Plus className="h-4 w-4 mr-1" />
-            新建项目
+            {t("newProject")}
           </Link>
         </Button>
       </div>

@@ -22,12 +22,14 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
     const planType = body.plan as keyof typeof PRICING_PLANS;
+    const locale = body.locale === "en" ? "en" : "zh";
 
     if (!planType || !PRICING_PLANS[planType]) {
       return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
     }
 
     const plan = PRICING_PLANS[planType];
+    const productName = plan.names[locale];
     const outTradeNo = generateOutTradeNo();
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
@@ -37,7 +39,7 @@ export async function POST(request: NextRequest) {
       userId: user.sub,
       outTradeNo,
       amount: plan.price.toString(),
-      productName: plan.name,
+      productName,
       creditsAmount: plan.credits,
       status: "pending",
     });
@@ -46,11 +48,11 @@ export async function POST(request: NextRequest) {
     const params: Record<string, string | number> = {
       pid: process.env.ZPAY_PID!,
       type: "alipay",
-      name: plan.name,
+      name: productName,
       money: plan.price,
       out_trade_no: outTradeNo,
       notify_url: `${siteUrl}/api/pay/notify`,
-      return_url: `${siteUrl}/api/pay/return`,
+      return_url: `${siteUrl}/api/pay/return?locale=${locale}`,
       sign_type: "MD5",
     };
 

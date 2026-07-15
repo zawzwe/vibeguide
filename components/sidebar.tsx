@@ -1,18 +1,20 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { ThemeSwitcher } from "@/components/theme-switcher";
+import { LanguageSwitcher } from "@/components/language-switcher";
 import { Folders, PlusCircle, User, Sparkles } from "lucide-react";
 
 const navItems = [
-  { href: "/projects", label: "我的项目", icon: Folders },
-  { href: "/projects/new", label: "新建项目", icon: PlusCircle },
-  { href: "/my", label: "我的", icon: User },
-];
+  { href: "/projects", labelKey: "projects", icon: Folders },
+  { href: "/projects/new", labelKey: "newProject", icon: PlusCircle },
+  { href: "/my", labelKey: "account", icon: User },
+] as const;
 
 export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
+  const t = useTranslations("Dashboard.navigation");
   const pathname = usePathname();
 
   const isActive = (href: string) => {
@@ -37,7 +39,7 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
           )}
         >
           <item.icon className="h-4 w-4" />
-          {item.label}
+          {t(item.labelKey)}
         </Link>
       ))}
     </nav>
@@ -55,7 +57,10 @@ export function Sidebar() {
         <SidebarNav />
       </div>
       <div className="border-t p-4">
-        <ThemeSwitcher />
+        <div className="flex items-center gap-2">
+          <LanguageSwitcher />
+          <ThemeSwitcher />
+        </div>
       </div>
     </aside>
   );
