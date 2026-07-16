@@ -10,6 +10,9 @@ export const payments = pgTable("payments", {
   creditsAmount: integer("credits_amount").notNull(),
   status: varchar("status", { length: 20 }).default("pending").notNull(),
   rawNotify: jsonb("raw_notify"),
+  provider: varchar("provider", { length: 20 }).default("zpay").notNull(),
+  checkoutId: varchar("checkout_id", { length: 128 }),
+  currency: varchar("currency", { length: 3 }).default("CNY").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

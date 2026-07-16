@@ -53,7 +53,8 @@ export async function updateSession(
     normalizedPathname === "/pricing" ||
     normalizedPathname.startsWith("/auth") ||
     normalizedPathname === "/api/pay/notify" ||
-    normalizedPathname === "/api/pay/return";
+    normalizedPathname === "/api/pay/return" ||
+    normalizedPathname === "/api/pay/ls-webhook";
 
   if (!isPublicRoute && !user) {
     // no user, potentially respond by redirecting the user to the login page
