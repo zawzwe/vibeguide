@@ -5,6 +5,7 @@ import { Geist } from "next/font/google";
 import { notFound } from "next/navigation";
 import { ThemeProvider } from "next-themes";
 import { routing } from "@/i18n/routing";
+import { Analytics } from "@vercel/analytics/next";
 import "../globals.css";
 
 const defaultUrl = process.env.VERCEL_URL
@@ -67,6 +68,7 @@ export default async function LocaleLayout({
           <NextIntlClientProvider messages={messages}>
             {children}
           </NextIntlClientProvider>
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>
