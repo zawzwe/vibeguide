@@ -5,6 +5,16 @@ import { Check, Sparkles } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { PricingPurchaseButton } from "@/components/pricing-purchase-button";
+import { CreemBuyButton } from "@/components/creem-buy-button";
+import { notFound } from "next/navigation";
+import { hasLocale } from "next-intl";
+import { routing } from "@/i18n/routing";
+import type { AppLocale } from "@/i18n/routing";
+
+const PRODUCT_ID_MAP: Record<string, string> = {
+  "10": process.env.NEXT_PUBLIC_CREEM_PRODUCT_ID_10 || process.env.NEXT_PUBLIC_CREEM_PRODUCT_ID || "",
+  "30": process.env.NEXT_PUBLIC_CREEM_PRODUCT_ID_30 || process.env.NEXT_PUBLIC_CREEM_PRODUCT_ID || "",
+};
 
 type PricingPlan = {
   name: string;
@@ -16,7 +26,16 @@ type PricingPlan = {
   plan: "10" | "30";
 };
 
-export default async function PricingPage() {
+export default async function PricingPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
+  const isEn = locale === "en";
   const t = await getTranslations("Pricing");
   const nav = await getTranslations("Navigation");
   const footer = await getTranslations("Home.footer");
@@ -85,7 +104,13 @@ export default async function PricingPage() {
                       </div>
                     ))}
                   </div>
-                  <PricingPurchaseButton plan={plan.plan} className="w-full" />
+                  {isEn ? (
+                    <CreemBuyButton productId={PRODUCT_ID_MAP[plan.plan]}>
+                      {t("buyNow")}
+                    </CreemBuyButton>
+                  ) : (
+                    <PricingPurchaseButton plan={plan.plan} className="w-full" />
+                  )}
                 </CardContent>
               </Card>
             ))}
