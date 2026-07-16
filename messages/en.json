@@ -13,13 +13,21 @@
     "chinese": "中文",
     "english": "English"
   },
+  "Footer": {
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "support": "Customer support",
+    "operator": "VibeGuide is operated by Arakai.",
+    "copyright": "© 2026 VibeGuide. All rights reserved."
+  },
   "Home": {
     "loading": "Loading...",
     "hero": {
       "badge": "AI powered",
       "titleLine1": "Turn your idea into",
       "titleLine2": "professional development docs",
-      "description": "VibeGuide helps you move from requirements to technical design in minutes, so you can spend more time building.",
+      "description": "VibeGuide guides you from requirements to technical design,",
+      "descriptionLine2": "so you can spend more time building.",
       "learnMore": "Learn more",
       "getStarted": "Start free trial"
     },
@@ -40,7 +48,7 @@
       "step2": {"title": "2. Clarify the requirements", "description": "Answer focused questions that help define the scope and key decisions."},
       "step3": {"title": "3. Generate the documents", "description": "Create five professional documents that you can review, edit, and download."}
     },
-    "cta": {"title": "Ready to get started?", "description": "Join developers who use AI to turn product ideas into clear technical plans."},
+    "cta": {"title": "Ready to get started?", "description": "Use AI to turn your product idea into a clear technical plan."},
     "pricing": {
       "title": "Simple, transparent pricing",
       "description": "Choose the number of project credits you need. Credits never expire.",
@@ -53,15 +61,9 @@
       "proDescription": "Best for builders working across multiple projects",
       "projects": "{count} projects",
       "basicFeatures": ["Complete docs for 10 projects", "5 document types", "Markdown downloads", "ZIP batch export", "AI requirements analysis"],
-      "proFeatures": ["Complete docs for 30 projects", "5 document types", "Markdown downloads", "ZIP batch export", "AI requirements analysis", "Priority support"],
+      "proFeatures": ["Complete docs for 30 projects", "5 document types", "Markdown downloads", "ZIP batch export", "AI requirements analysis"],
       "buyNow": "Buy now",
       "recommended": "Recommended"
-    },
-    "stats": {
-      "documents": "Documents generated",
-      "developers": "Active developers",
-      "analyses": "AI analyses",
-      "satisfaction": "User satisfaction"
     },
     "faq": {
       "title": "Frequently asked questions",
@@ -69,12 +71,11 @@
       "items": [
         {"q": "What is VibeGuide?", "a": "VibeGuide is an AI documentation platform for developers and product builders. Describe your idea and it generates a user journey map, PRD, frontend design, backend design, and database design."},
         {"q": "How do I get started?", "a": "Create an account, start a project, and describe what you want to build. VibeGuide will guide you through requirements analysis before generating your documents."},
-        {"q": "How long does document generation take?", "a": "Most projects finish in one to three minutes, depending on complexity. The five documents are generated in parallel."},
+        {"q": "How long does document generation take?", "a": "Generation time varies with project complexity and AI service availability. The five documents are normally processed in parallel."},
         {"q": "Can I download the documents?", "a": "Yes. Download any document as Markdown, or export the complete project as a ZIP archive."},
         {"q": "How do project credits work?", "a": "Each generated project uses one credit. The current checkout is processed in CNY through Alipay."}
       ]
-    },
-    "footer": {"features": "Features", "copyright": "© 2026 VibeGuide. All rights reserved."}
+    }
   },
   "Pricing": {
     "badge": "Simple pricing",
@@ -88,7 +89,7 @@
     "paymentError": "We couldn't start the payment. Please try again.",
     "plans": {
       "basic": {"name": "Basic", "description": "A practical starting point for solo developers", "price": "4.99", "features": ["Complete docs for 10 projects", "All 5 document types", "Markdown downloads", "ZIP batch export", "AI requirements analysis"]},
-      "pro": {"name": "Pro", "description": "Best for builders working across multiple projects", "price": "9.99", "features": ["Complete docs for 30 projects", "All 5 document types", "Markdown downloads", "ZIP batch export", "AI requirements analysis", "Priority support"]}
+      "pro": {"name": "Pro", "description": "Best for builders working across multiple projects", "price": "9.99", "features": ["Complete docs for 30 projects", "All 5 document types", "Markdown downloads", "ZIP batch export", "AI requirements analysis"]}
     }
   },
   "Auth": {

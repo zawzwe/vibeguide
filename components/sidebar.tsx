@@ -3,7 +3,8 @@
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
-import { Folders, PlusCircle, User } from "lucide-react";
+import { FileText, Folders, Mail, PlusCircle, ShieldCheck, User } from "lucide-react";
+import { SUPPORT_EMAIL } from "@/lib/site-config";
 
 const navItems = [
   { href: "/projects", labelKey: "projects", icon: Folders },
@@ -13,6 +14,7 @@ const navItems = [
 
 export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   const t = useTranslations("Dashboard.navigation");
+  const footer = useTranslations("Footer");
   const pathname = usePathname();
 
   const isActive = (href: string) => {
@@ -40,6 +42,33 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
           {t(item.labelKey)}
         </Link>
       ))}
+
+      <div className="mt-6 flex flex-col gap-1 border-t pt-4">
+        <Link
+          href="/privacy"
+          onClick={onNavigate}
+          className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+        >
+          <ShieldCheck className="h-4 w-4" />
+          {footer("privacy")}
+        </Link>
+        <Link
+          href="/terms"
+          onClick={onNavigate}
+          className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+        >
+          <FileText className="h-4 w-4" />
+          {footer("terms")}
+        </Link>
+        <a
+          href={`mailto:${SUPPORT_EMAIL}`}
+          onClick={onNavigate}
+          className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+        >
+          <Mail className="h-4 w-4 shrink-0" />
+          <span className="break-all">{SUPPORT_EMAIL}</span>
+        </a>
+      </div>
     </nav>
   );
 }

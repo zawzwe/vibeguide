@@ -3,9 +3,19 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { User, Coins, ArrowRight, ShoppingCart, Shield } from "lucide-react";
+import {
+  ArrowRight,
+  Coins,
+  FileText,
+  Mail,
+  Shield,
+  ShieldCheck,
+  ShoppingCart,
+  User,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { SUPPORT_EMAIL } from "@/lib/site-config";
 
 interface UserProfileProps {
   email: string;
@@ -15,6 +25,7 @@ interface UserProfileProps {
 
 export function UserProfile({ email, credits, isAdmin }: UserProfileProps) {
   const t = useTranslations("Dashboard.account");
+  const footer = useTranslations("Footer");
   return (
     <div className="space-y-6 max-w-2xl">
       <Card>
@@ -86,6 +97,37 @@ export function UserProfile({ email, credits, isAdmin }: UserProfileProps) {
               </Link>
             </Button>
           ) : null}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <Mail className="h-5 w-5 text-primary" />
+            <CardTitle>{footer("support")}</CardTitle>
+          </div>
+          <CardDescription>
+            <a
+              href={`mailto:${SUPPORT_EMAIL}`}
+              className="font-medium text-foreground underline-offset-4 hover:underline"
+            >
+              {SUPPORT_EMAIL}
+            </a>
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex flex-col gap-3 sm:flex-row">
+          <Button asChild variant="outline" className="flex-1 gap-2">
+            <Link href="/privacy">
+              <ShieldCheck className="h-4 w-4" />
+              {footer("privacy")}
+            </Link>
+          </Button>
+          <Button asChild variant="outline" className="flex-1 gap-2">
+            <Link href="/terms">
+              <FileText className="h-4 w-4" />
+              {footer("terms")}
+            </Link>
+          </Button>
         </CardContent>
       </Card>
     </div>

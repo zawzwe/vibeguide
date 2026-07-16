@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { SiteFooter } from "@/components/site-footer";
 
 const features = [
   { icon: Map, key: "journey" },
@@ -37,14 +38,7 @@ const features = [
 
 export default async function Home() {
   const t = await getTranslations("Home");
-  const nav = await getTranslations("Navigation");
   const faqItems = t.raw("faq.items") as { q: string; a: string }[];
-  const stats = [
-    { value: "10,000+", key: "documents" },
-    { value: "5,000+", key: "developers" },
-    { value: "50,000+", key: "analyses" },
-    { value: "98%", key: "satisfaction" },
-  ] as const;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -66,6 +60,8 @@ export default async function Home() {
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto">
               {t("hero.description")}
+              <br />
+              {t("hero.descriptionLine2")}
             </p>
             <div className="flex items-center justify-center gap-4 pt-4">
               <Suspense fallback={<Button size="lg" disabled>{t("loading")}</Button>}>
@@ -217,20 +213,6 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-20 bg-muted/30">
-        <div className="max-w-7xl mx-auto px-4 md:px-6">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {stats.map((stat) => (
-              <div key={stat.key} className="space-y-2">
-                <div className="text-3xl md:text-4xl font-bold text-primary">{stat.value}</div>
-                <div className="text-sm text-muted-foreground">{t(`stats.${stat.key}`)}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* FAQ Section */}
       <section id="faq" className="py-20">
         <div className="max-w-3xl mx-auto px-4 md:px-6">
@@ -249,26 +231,7 @@ export default async function Home() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t py-12">
-        <div className="max-w-7xl mx-auto px-4 md:px-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-2 font-bold text-lg">
-              <Sparkles className="h-5 w-5 text-primary" />
-              <span>VibeGuide</span>
-            </div>
-            <nav className="flex gap-6 text-sm text-muted-foreground">
-              <Link href="/" className="hover:text-foreground transition-colors">{nav("home")}</Link>
-              <Link href="/pricing" className="hover:text-foreground transition-colors">{nav("pricing")}</Link>
-              <Link href="#features" className="hover:text-foreground transition-colors">{t("footer.features")}</Link>
-              <Link href="#faq" className="hover:text-foreground transition-colors">FAQ</Link>
-            </nav>
-            <p className="text-sm text-muted-foreground">
-              {t("footer.copyright")}
-            </p>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

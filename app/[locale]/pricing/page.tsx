@@ -3,13 +3,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Check, Sparkles } from "lucide-react";
 import { getTranslations } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
 import { PricingPurchaseButton } from "@/components/pricing-purchase-button";
 import { CreemBuyButton } from "@/components/creem-buy-button";
+import { SiteFooter } from "@/components/site-footer";
 import { notFound } from "next/navigation";
 import { hasLocale } from "next-intl";
 import { routing } from "@/i18n/routing";
-import type { AppLocale } from "@/i18n/routing";
 
 const PRODUCT_ID_MAP: Record<string, string> = {
   "10": process.env.NEXT_PUBLIC_CREEM_PRODUCT_ID_10 || process.env.NEXT_PUBLIC_CREEM_PRODUCT_ID || "",
@@ -37,8 +36,6 @@ export default async function PricingPage({
   }
   const isEn = locale === "en";
   const t = await getTranslations("Pricing");
-  const nav = await getTranslations("Navigation");
-  const footer = await getTranslations("Home.footer");
   const plans: PricingPlan[] = [
     {
       name: t("plans.basic.name"),
@@ -118,28 +115,7 @@ export default async function PricingPage({
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t py-12">
-        <div className="max-w-7xl mx-auto px-4 md:px-6">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-2 font-bold text-lg">
-              <Sparkles className="h-5 w-5 text-primary" />
-              <span>VibeGuide</span>
-            </div>
-            <nav className="flex gap-6 text-sm text-muted-foreground">
-              <Link href="/" className="hover:text-foreground transition-colors">
-                {nav("home")}
-              </Link>
-              <Link href="/pricing" className="hover:text-foreground transition-colors">
-                {nav("pricing")}
-              </Link>
-            </nav>
-            <p className="text-sm text-muted-foreground">
-              {footer("copyright")}
-            </p>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
