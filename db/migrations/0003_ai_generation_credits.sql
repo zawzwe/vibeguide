@@ -10,6 +10,8 @@ CREATE TABLE IF NOT EXISTS public.ai_generations (
   updated_at timestamp DEFAULT now() NOT NULL
 );
 
+ALTER TABLE public.ai_generations ENABLE ROW LEVEL SECURITY;
+
 CREATE INDEX IF NOT EXISTS ai_generations_user_id_idx
 ON public.ai_generations (user_id);
 
