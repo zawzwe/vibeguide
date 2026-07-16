@@ -52,6 +52,7 @@ export function StepRequirements({
   const [error, setError] = useState<string | null>(null);
   const [showNoCredits, setShowNoCredits] = useState(false);
   const [checkingCredits, setCheckingCredits] = useState(false);
+  const [creditCheckError, setCreditCheckError] = useState<string | null>(null);
 
   useEffect(() => {
     if (initialQA.length > 0) return;
@@ -63,6 +64,10 @@ export function StepRequirements({
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ description, locale }),
         });
+        if (res.status === 402) {
+          setShowNoCredits(true);
+          return;
+        }
         if (!res.ok) throw new Error(t("loadError"));
         const data = await res.json();
         setQuestions(data.questions || []);
@@ -82,8 +87,12 @@ export function StepRequirements({
 
   const handleNext = async () => {
     setCheckingCredits(true);
+    setCreditCheckError(null);
     try {
       const res = await fetch("/api/credits/check", { method: "POST" });
+      if (!res.ok) {
+        throw new Error(t("creditCheckError"));
+      }
       const data = await res.json();
       if (!data.hasCredits) {
         setShowNoCredits(true);
@@ -95,13 +104,10 @@ export function StepRequirements({
         answer: answers[i] || "",
       }));
       onNext(qa);
-    } catch {
-      // If credit check fails, still allow proceeding
-      const qa: QA[] = questions.map((q, i) => ({
-        question: q,
-        answer: answers[i] || "",
-      }));
-      onNext(qa);
+    } catch (checkError) {
+      setCreditCheckError(
+        checkError instanceof Error ? checkError.message : t("creditCheckError"),
+      );
     } finally {
       setCheckingCredits(false);
     }
@@ -151,6 +157,13 @@ export function StepRequirements({
                   />
                 </div>
               ))}
+            </div>
+          )}
+
+          {creditCheckError && (
+            <div className="flex items-center gap-2 text-red-500">
+              <AlertCircle className="h-4 w-4" />
+              <p className="text-sm">{creditCheckError}</p>
             </div>
           )}
 

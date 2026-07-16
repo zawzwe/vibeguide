@@ -209,14 +209,21 @@
       "noCreditsDescription": "Add a project credit before generating the documents.",
       "cancel": "Cancel",
       "topUp": "Get credits",
-      "loadError": "We couldn't generate the questions. Please try again."
+      "loadError": "We couldn't generate the questions. Please try again.",
+      "creditCheckError": "We couldn't verify your credit balance. Please try again."
     },
     "documents": {
       "types": {"journey": "User Journey Map", "prd": "Product Requirements Document", "frontend": "Frontend Design Document", "backend": "Backend Design Document", "database": "Database Design Document"},
       "generating": "Generating documents...",
       "generatingDescription": "The AI is creating your project documentation. This may take a moment.",
       "generationFailed": "Generation failed",
+      "generationFailedDescription": "We couldn't generate all five documents. Please try again.",
+      "generationFailedRefunded": "We couldn't generate all five documents. Your project credit has been returned.",
+      "generationInProgress": "This document set is still being generated. Check again in a moment.",
+      "insufficientCredits": "You have no project credits remaining.",
       "retry": "Try again",
+      "checkAgain": "Check again",
+      "getCredits": "Get credits",
       "title": "Generated documents",
       "description": "Your five development documents are ready.",
       "preview": "Preview",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { StepIndicator } from "@/components/step-indicator";
 import { StepDescription } from "@/components/step-description";
 import { StepRequirements } from "@/components/step-requirements";
@@ -58,6 +58,13 @@ export function ProjectWizard({
     setData((prev) => ({ ...prev, qa }));
     setCurrentStep(3);
   };
+
+  const handleDocumentsGenerated = useCallback(
+    (documents: Record<string, string>) => {
+      setData((prev) => ({ ...prev, documents }));
+    },
+    [],
+  );
 
   const handleSave = async (documents: Record<string, string>) => {
     setIsSaving(true);
@@ -121,6 +128,7 @@ export function ProjectWizard({
           description={data.description}
           qa={data.qa}
           initialDocuments={data.documents}
+          onDocumentsGenerated={handleDocumentsGenerated}
           onSave={handleSave}
           onBack={() => setCurrentStep(2)}
           projectId={projectId}

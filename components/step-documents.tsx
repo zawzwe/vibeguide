@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -10,6 +10,7 @@ import remarkGfm from "remark-gfm";
 import { FileText, Download, Eye, Code, ArrowLeft, Save, Package } from "lucide-react";
 import type { AppLocale } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 interface QA {
   question: string;
@@ -20,6 +21,7 @@ interface StepDocumentsProps {
   description: string;
   qa: QA[];
   initialDocuments: Record<string, string>;
+  onDocumentsGenerated: (documents: Record<string, string>) => void;
   onSave: (documents: Record<string, string>) => Promise<void>;
   onBack: () => void;
   projectId?: string;
@@ -41,6 +43,7 @@ export function StepDocuments({
   description,
   qa,
   initialDocuments,
+  onDocumentsGenerated,
   onSave,
   onBack,
   projectId,
@@ -58,22 +61,48 @@ export function StepDocuments({
   const [documents, setDocuments] = useState<Record<string, string>>(initialDocuments);
   const [loading, setLoading] = useState(Object.keys(initialDocuments).length === 0);
   const [error, setError] = useState<string | null>(null);
+  const [errorCode, setErrorCode] = useState<string | null>(null);
+  const [generationId, setGenerationId] = useState(() => crypto.randomUUID());
+  const [requestVersion, setRequestVersion] = useState(0);
+  const requestedGenerationId = useRef<string | null>(null);
   const [activeTab, setActiveTab] = useState<(typeof docTypeKeys)[number]>(docTypeKeys[0]);
   const [viewMode, setViewMode] = useState<"markdown" | "preview">("preview");
 
   useEffect(() => {
     if (Object.keys(initialDocuments).length > 0) return;
+    if (requestedGenerationId.current === generationId) return;
+    requestedGenerationId.current = generationId;
 
     async function fetchDocuments() {
       try {
+        setError(null);
+        setErrorCode(null);
         const res = await fetch("/api/ai/documents", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ description, qa, locale }),
+          body: JSON.stringify({ generationId, description, qa, locale }),
         });
-        if (!res.ok) throw new Error(t("generationFailed"));
-        const data = await res.json();
-        setDocuments(data.documents || {});
+        const data = await res.json().catch(() => ({}));
+
+        if (!res.ok) {
+          const code = typeof data.code === "string" ? data.code : null;
+          setErrorCode(code);
+
+          if (code === "INSUFFICIENT_CREDITS") {
+            throw new Error(t("insufficientCredits"));
+          }
+          if (code === "GENERATION_IN_PROGRESS") {
+            throw new Error(t("generationInProgress"));
+          }
+          if (code === "GENERATION_FAILED" && data.refunded) {
+            throw new Error(t("generationFailedRefunded"));
+          }
+          throw new Error(t("generationFailedDescription"));
+        }
+
+        const generatedDocuments = data.documents || {};
+        setDocuments(generatedDocuments);
+        onDocumentsGenerated(generatedDocuments);
       } catch (e) {
         setError(e instanceof Error ? e.message : t("generationFailed"));
       } finally {
@@ -82,7 +111,30 @@ export function StepDocuments({
     }
 
     fetchDocuments();
-  }, [description, qa, initialDocuments, locale, t]);
+  }, [
+    description,
+    qa,
+    initialDocuments,
+    locale,
+    t,
+    generationId,
+    requestVersion,
+    onDocumentsGenerated,
+  ]);
+
+  const handleRetry = () => {
+    setError(null);
+    setErrorCode(null);
+    setLoading(true);
+
+    if (errorCode === "GENERATION_IN_PROGRESS") {
+      requestedGenerationId.current = null;
+      setRequestVersion((version) => version + 1);
+      return;
+    }
+
+    setGenerationId(crypto.randomUUID());
+  };
 
   const handleDownloadSingle = (key: string) => {
     const content = documents[key];
@@ -145,9 +197,17 @@ export function StepDocuments({
           <CardDescription>{error}</CardDescription>
         </CardHeader>
         <CardContent>
-          <Button variant="outline" onClick={() => window.location.reload()}>
-            {t("retry")}
-          </Button>
+          {errorCode === "INSUFFICIENT_CREDITS" ? (
+            <Button asChild>
+              <Link href="/pricing">{t("getCredits")}</Link>
+            </Button>
+          ) : (
+            <Button variant="outline" onClick={handleRetry}>
+              {errorCode === "GENERATION_IN_PROGRESS"
+                ? t("checkAgain")
+                : t("retry")}
+            </Button>
+          )}
         </CardContent>
       </Card>
     );

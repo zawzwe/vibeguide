@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { credits, getDb } from "@/db";
+import { isAdmin } from "@/lib/admin";
+import { eq } from "drizzle-orm";
 import OpenAI from "openai";
 
 export const dynamic = "force-dynamic";
@@ -12,6 +15,25 @@ export async function POST(request: NextRequest) {
 
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    if (!isAdmin(typeof user.email === "string" ? user.email : undefined)) {
+      const db = getDb();
+      const [creditRecord] = await db
+        .select({ balance: credits.balance })
+        .from(credits)
+        .where(eq(credits.userId, user.sub))
+        .limit(1);
+
+      if (!creditRecord || creditRecord.balance <= 0) {
+        return NextResponse.json(
+          {
+            error: "No project credits remaining",
+            code: "INSUFFICIENT_CREDITS",
+          },
+          { status: 402 },
+        );
+      }
     }
 
     const { description, locale: requestedLocale } = await request.json();

@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { aiGenerations, credits, getDb } from "@/db";
+import { isAdmin } from "@/lib/admin";
+import { and, eq, gt, lt, sql } from "drizzle-orm";
 import OpenAI from "openai";
 
 const DOC_TYPES = [
@@ -217,6 +220,17 @@ Use this structure:
 
 export const dynamic = "force-dynamic";
 
+const GENERATION_TIMEOUT_MS = 15 * 60 * 1000;
+const UUID_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+function generationErrorMessage(error: unknown) {
+  return (error instanceof Error ? error.message : "Unknown generation error").slice(
+    0,
+    1000,
+  );
+}
+
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient();
@@ -227,63 +241,275 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { description, qa, locale: requestedLocale } = await request.json();
+    const {
+      generationId,
+      description,
+      qa,
+      locale: requestedLocale,
+    } = await request.json();
     const locale = requestedLocale === "en" ? "en" : "zh";
 
-    if (!description) {
+    if (typeof generationId !== "string" || !UUID_PATTERN.test(generationId)) {
+      return NextResponse.json(
+        { error: "Invalid generation request", code: "INVALID_GENERATION_ID" },
+        { status: 400 },
+      );
+    }
+
+    if (typeof description !== "string" || !description.trim()) {
       return NextResponse.json({ error: "Description required" }, { status: 400 });
     }
 
-    const qaText = qa
-      ? (qa as { question: string; answer: string }[])
-          .map((item) => `Q: ${item.question}\nA: ${item.answer}`)
-          .join("\n\n")
-      : "";
+    const normalizedQa = Array.isArray(qa)
+      ? qa
+          .filter(
+            (item): item is { question: string; answer: string } =>
+              item !== null &&
+              typeof item === "object" &&
+              typeof item.question === "string" &&
+              typeof item.answer === "string",
+          )
+          .slice(0, 10)
+      : [];
 
+    const qaText = normalizedQa
+      .map((item) => `Q: ${item.question}\nA: ${item.answer}`)
+      .join("\n\n");
     const userPrompt = locale === "en"
       ? `Project description:\n${description}\n\nRequirements Q&A:\n${qaText}`
       : `项目描述：\n${description}\n\n需求分析问答：\n${qaText}`;
     const docTypes = locale === "en" ? EN_DOC_TYPES : DOC_TYPES;
 
-    const openai = new OpenAI({
-      baseURL: "https://api.deepseek.com",
-      apiKey: process.env.DEEPSEEK_API_KEY!,
-    });
+    const userId = user.sub;
+    const admin = isAdmin(typeof user.email === "string" ? user.email : undefined);
+    const db = getDb();
+    const staleBefore = new Date(Date.now() - GENERATION_TIMEOUT_MS);
 
-    const docPromises = docTypes.map(async (doc) => {
-      try {
-        const completion = await openai.chat.completions.create({
-          model: "deepseek-v4-flash",
-          messages: [
-            { role: "system", content: doc.prompt },
-            { role: "user", content: userPrompt },
-          ],
-          stream: false,
-          max_tokens: 8192,
-        });
+    const reservation = await db.transaction(async (tx) => {
+      // Recover credits held by interrupted serverless requests. This is done
+      // before a new reservation so a crashed generation cannot strand credit.
+      const staleGenerations = await tx
+        .update(aiGenerations)
+        .set({
+          status: "refunded",
+          error: "Generation timed out before completion",
+          updatedAt: new Date(),
+        })
+        .where(
+          and(
+            eq(aiGenerations.userId, userId),
+            eq(aiGenerations.status, "processing"),
+            lt(aiGenerations.updatedAt, staleBefore),
+          ),
+        )
+        .returning({ creditCharged: aiGenerations.creditCharged });
 
-        return {
-          key: doc.key,
-          content: completion.choices[0]?.message?.content || "",
-        };
-      } catch (err) {
-        console.error(`Failed to generate ${doc.key}:`, err);
-        return {
-          key: doc.key,
-          content: locale === "en"
-            ? `# ${doc.title}\n\nGeneration failed. Please try again.\n\nError: ${err instanceof Error ? err.message : "Unknown error"}`
-            : `# ${doc.title}\n\n生成失败，请重试。\n\n错误：${err instanceof Error ? err.message : "未知错误"}`,
-        };
+      const staleCreditCount = staleGenerations.filter(
+        (generation) => generation.creditCharged,
+      ).length;
+
+      if (staleCreditCount > 0) {
+        await tx
+          .update(credits)
+          .set({
+            balance: sql`${credits.balance} + ${staleCreditCount}`,
+            updatedAt: new Date(),
+          })
+          .where(eq(credits.userId, userId));
       }
+
+      const [created] = await tx
+        .insert(aiGenerations)
+        .values({
+          id: generationId,
+          userId,
+          locale,
+          status: "processing",
+          creditCharged: false,
+        })
+        .onConflictDoNothing()
+        .returning({ id: aiGenerations.id });
+
+      if (!created) {
+        return { kind: "duplicate" as const };
+      }
+
+      if (admin) {
+        return { kind: "reserved" as const, remainingCredits: null };
+      }
+
+      const [debited] = await tx
+        .update(credits)
+        .set({
+          balance: sql`${credits.balance} - 1`,
+          updatedAt: new Date(),
+        })
+        .where(and(eq(credits.userId, userId), gt(credits.balance, 0)))
+        .returning({ balance: credits.balance });
+
+      if (!debited) {
+        await tx.delete(aiGenerations).where(eq(aiGenerations.id, generationId));
+        return { kind: "insufficient" as const };
+      }
+
+      await tx
+        .update(aiGenerations)
+        .set({ creditCharged: true, updatedAt: new Date() })
+        .where(eq(aiGenerations.id, generationId));
+
+      return {
+        kind: "reserved" as const,
+        remainingCredits: debited.balance,
+      };
     });
 
-    const results = await Promise.all(docPromises);
-    const documents: Record<string, string> = {};
-    results.forEach(({ key, content }) => {
-      documents[key] = content;
-    });
+    if (reservation.kind === "insufficient") {
+      return NextResponse.json(
+        {
+          error: "No project credits remaining",
+          code: "INSUFFICIENT_CREDITS",
+        },
+        { status: 402 },
+      );
+    }
 
-    return NextResponse.json({ documents });
+    if (reservation.kind === "duplicate") {
+      const [existing] = await db
+        .select({
+          status: aiGenerations.status,
+          documents: aiGenerations.documents,
+        })
+        .from(aiGenerations)
+        .where(
+          and(
+            eq(aiGenerations.id, generationId),
+            eq(aiGenerations.userId, userId),
+          ),
+        )
+        .limit(1);
+
+      if (existing?.status === "completed" && existing.documents) {
+        return NextResponse.json({ documents: existing.documents, cached: true });
+      }
+
+      return NextResponse.json(
+        {
+          error:
+            existing?.status === "processing"
+              ? "Document generation is already in progress"
+              : "This generation request cannot be reused",
+          code:
+            existing?.status === "processing"
+              ? "GENERATION_IN_PROGRESS"
+              : "GENERATION_REQUEST_CONFLICT",
+        },
+        { status: 409 },
+      );
+    }
+
+    try {
+      const openai = new OpenAI({
+        baseURL: "https://api.deepseek.com",
+        apiKey: process.env.DEEPSEEK_API_KEY!,
+      });
+
+      const results = await Promise.all(
+        docTypes.map(async (doc) => {
+          const completion = await openai.chat.completions.create({
+            model: "deepseek-v4-flash",
+            messages: [
+              { role: "system", content: doc.prompt },
+              { role: "user", content: userPrompt },
+            ],
+            stream: false,
+            max_tokens: 8192,
+          });
+
+          const content = completion.choices[0]?.message?.content?.trim();
+          if (!content) {
+            throw new Error(`DeepSeek returned an empty ${doc.key} document`);
+          }
+
+          return {
+            key: doc.key,
+            content,
+          };
+        }),
+      );
+
+      const documents: Record<string, string> = {};
+      results.forEach(({ key, content }) => {
+        documents[key] = content;
+      });
+
+      const [completed] = await db
+        .update(aiGenerations)
+        .set({
+          status: "completed",
+          documents,
+          error: null,
+          updatedAt: new Date(),
+        })
+        .where(
+          and(
+            eq(aiGenerations.id, generationId),
+            eq(aiGenerations.userId, userId),
+            eq(aiGenerations.status, "processing"),
+          ),
+        )
+        .returning({ id: aiGenerations.id });
+
+      if (!completed) {
+        throw new Error("Generation reservation expired before completion");
+      }
+
+      return NextResponse.json({
+        documents,
+        remainingCredits: reservation.remainingCredits,
+      });
+    } catch (generationError) {
+      console.error("AI document generation failed:", generationError);
+      const errorMessage = generationErrorMessage(generationError);
+
+      const creditReturned = await db.transaction(async (tx) => {
+        const [refunded] = await tx
+          .update(aiGenerations)
+          .set({
+            status: "refunded",
+            error: errorMessage,
+            updatedAt: new Date(),
+          })
+          .where(
+            and(
+              eq(aiGenerations.id, generationId),
+              eq(aiGenerations.userId, userId),
+              eq(aiGenerations.status, "processing"),
+            ),
+          )
+          .returning({ creditCharged: aiGenerations.creditCharged });
+
+        if (refunded?.creditCharged) {
+          await tx
+            .update(credits)
+            .set({
+              balance: sql`${credits.balance} + 1`,
+              updatedAt: new Date(),
+            })
+            .where(eq(credits.userId, userId));
+        }
+
+        return refunded?.creditCharged ?? false;
+      });
+
+      return NextResponse.json(
+        {
+          error: "Failed to generate all project documents",
+          code: "GENERATION_FAILED",
+          refunded: creditReturned,
+        },
+        { status: 502 },
+      );
+    }
   } catch (error) {
     console.error("AI documents error:", error);
     return NextResponse.json({ error: "Failed to generate documents" }, { status: 500 });

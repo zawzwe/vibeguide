@@ -209,14 +209,21 @@
       "noCreditsDescription": "你的项目点数已用完，请充值后继续使用。",
       "cancel": "取消",
       "topUp": "去充值",
-      "loadError": "无法生成问题，请重试"
+      "loadError": "无法生成问题，请重试",
+      "creditCheckError": "无法验证项目点数余额，请重试。"
     },
     "documents": {
       "types": {"journey": "用户旅程地图", "prd": "产品需求PRD", "frontend": "前端设计文档", "backend": "后端设计文档", "database": "数据库设计"},
       "generating": "正在生成文档...",
       "generatingDescription": "AI 正在为你生成专业的开发文档，请稍候",
       "generationFailed": "生成失败",
+      "generationFailedDescription": "无法完整生成 5 份文档，请重试。",
+      "generationFailedRefunded": "无法完整生成 5 份文档，本次消耗的项目点数已退回。",
+      "generationInProgress": "这组文档仍在生成中，请稍后再次检查。",
+      "insufficientCredits": "你的项目点数已用完，请先充值。",
       "retry": "重试",
+      "checkAgain": "再次检查",
+      "getCredits": "获取点数",
       "title": "生成的文档",
       "description": "AI 已为你生成了 5 份专业开发文档",
       "preview": "预览",
