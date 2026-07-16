@@ -45,6 +45,8 @@
       "title": "简单透明的定价",
       "description": "选择适合你的套餐，随时可以充值更多",
       "currency": "¥",
+      "basicPrice": "20",
+      "proPrice": "40",
       "basicName": "基础版",
       "basicDescription": "适合个人开发者快速上手",
       "proName": "专业版",
@@ -85,8 +87,8 @@
     "processing": "处理中...",
     "paymentError": "支付创建失败，请稍后再试",
     "plans": {
-      "basic": {"name": "基础版", "description": "适合个人开发者快速上手", "features": ["生成 10 个项目的完整文档", "5 种文档类型全覆盖", "Markdown 格式下载", "ZIP 批量下载", "AI 需求分析"]},
-      "pro": {"name": "专业版", "description": "适合有多个项目需求的用户", "features": ["生成 30 个项目的完整文档", "5 种文档类型全覆盖", "Markdown 格式下载", "ZIP 批量下载", "AI 需求分析", "优先技术支持"]}
+      "basic": {"name": "基础版", "description": "适合个人开发者快速上手", "price": "20", "features": ["生成 10 个项目的完整文档", "5 种文档类型全覆盖", "Markdown 格式下载", "ZIP 批量下载", "AI 需求分析"]},
+      "pro": {"name": "专业版", "description": "适合有多个项目需求的用户", "price": "40", "features": ["生成 30 个项目的完整文档", "5 种文档类型全覆盖", "Markdown 格式下载", "ZIP 批量下载", "AI 需求分析", "优先技术支持"]}
     }
   },
   "Auth": {

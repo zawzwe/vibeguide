@@ -44,7 +44,9 @@
     "pricing": {
       "title": "Simple, transparent pricing",
       "description": "Choose the number of project credits you need. Credits never expire.",
-      "currency": "CNY ¥",
+      "currency": "$",
+      "basicPrice": "4.99",
+      "proPrice": "9.99",
       "basicName": "Basic",
       "basicDescription": "A practical starting point for solo developers",
       "proName": "Pro",
@@ -78,15 +80,15 @@
     "badge": "Simple pricing",
     "title": "Choose the plan that fits your work",
     "description": "Each generated project uses one credit. Credits never expire and you can top up at any time.",
-    "currency": "CNY ¥",
+    "currency": "$",
     "recommended": "Recommended",
     "projects": "{count} projects",
     "buyNow": "Buy now",
     "processing": "Processing...",
     "paymentError": "We couldn't start the payment. Please try again.",
     "plans": {
-      "basic": {"name": "Basic", "description": "A practical starting point for solo developers", "features": ["Complete docs for 10 projects", "All 5 document types", "Markdown downloads", "ZIP batch export", "AI requirements analysis"]},
-      "pro": {"name": "Pro", "description": "Best for builders working across multiple projects", "features": ["Complete docs for 30 projects", "All 5 document types", "Markdown downloads", "ZIP batch export", "AI requirements analysis", "Priority support"]}
+      "basic": {"name": "Basic", "description": "A practical starting point for solo developers", "price": "4.99", "features": ["Complete docs for 10 projects", "All 5 document types", "Markdown downloads", "ZIP batch export", "AI requirements analysis"]},
+      "pro": {"name": "Pro", "description": "Best for builders working across multiple projects", "price": "9.99", "features": ["Complete docs for 30 projects", "All 5 document types", "Markdown downloads", "ZIP batch export", "AI requirements analysis", "Priority support"]}
     }
   },
   "Auth": {

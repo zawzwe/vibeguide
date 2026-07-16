@@ -23,7 +23,7 @@ export default async function PricingPage() {
   const plans: PricingPlan[] = [
     {
       name: t("plans.basic.name"),
-      price: "20",
+      price: t("plans.basic.price"),
       projects: 10,
       description: t("plans.basic.description"),
       features: t.raw("plans.basic.features") as string[],
@@ -32,7 +32,7 @@ export default async function PricingPage() {
     },
     {
       name: t("plans.pro.name"),
-      price: "40",
+      price: t("plans.pro.price"),
       projects: 30,
       description: t("plans.pro.description"),
       features: t.raw("plans.pro.features") as string[],

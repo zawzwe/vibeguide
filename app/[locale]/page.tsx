@@ -174,7 +174,7 @@ export default async function Home() {
               <CardHeader>
                 <CardTitle className="text-xl">{t("pricing.basicName")}</CardTitle>
                 <div className="mt-4">
-                  <span className="text-4xl font-bold">{t("pricing.currency")}20</span>
+                  <span className="text-4xl font-bold">{t("pricing.currency")}{t("pricing.basicPrice")}</span>
                   <span className="text-muted-foreground ml-2">/ {t("pricing.projects", { count: 10 })}</span>
                 </div>
                 <CardDescription>{t("pricing.basicDescription")}</CardDescription>
@@ -196,7 +196,7 @@ export default async function Home() {
               <CardHeader>
                 <CardTitle className="text-xl">{t("pricing.proName")}</CardTitle>
                 <div className="mt-4">
-                  <span className="text-4xl font-bold">{t("pricing.currency")}40</span>
+                  <span className="text-4xl font-bold">{t("pricing.currency")}{t("pricing.proPrice")}</span>
                   <span className="text-muted-foreground ml-2">/ {t("pricing.projects", { count: 30 })}</span>
                 </div>
                 <CardDescription>{t("pricing.proDescription")}</CardDescription>
