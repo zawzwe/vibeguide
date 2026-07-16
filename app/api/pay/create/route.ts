@@ -7,7 +7,6 @@ import {
   buildPaymentUrl,
   PRICING_PLANS,
 } from "@/lib/zpay";
-import { createCheckout, PRICING_PLANS_USD } from "@/lib/lemon-squeezy";
 
 export const dynamic = "force-dynamic";
 
@@ -29,39 +28,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Invalid plan" }, { status: 400 });
     }
 
-    const outTradeNo = generateOutTradeNo();
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-    const db = getDb();
-
-    // English users → Lemon Squeezy (USD)
-    if (locale === "en") {
-      const lsPlan = PRICING_PLANS_USD[planType];
-
-      await db.insert(payments).values({
-        userId: user.sub,
-        outTradeNo,
-        amount: lsPlan.price.toString(),
-        productName: lsPlan.name,
-        creditsAmount: lsPlan.credits,
-        status: "pending",
-        provider: "lemon-squeezy",
-        currency: "USD",
-      });
-
-      const { checkoutUrl } = await createCheckout({
-        plan: planType,
-        userId: user.sub,
-        outTradeNo,
-        siteUrl,
-      });
-
-      return NextResponse.json({ payUrl: checkoutUrl, outTradeNo });
-    }
-
-    // Chinese users → Z-Pay (CNY, unchanged)
     const plan = PRICING_PLANS[planType];
     const productName = plan.names[locale];
+    const outTradeNo = generateOutTradeNo();
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
+    const db = getDb();
     await db.insert(payments).values({
       userId: user.sub,
       outTradeNo,
