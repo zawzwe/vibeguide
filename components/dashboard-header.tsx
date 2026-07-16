@@ -8,12 +8,22 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import { SidebarNav } from "@/components/sidebar";
 import { Link } from "@/i18n/navigation";
 import { Menu, Sparkles } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-export function DashboardHeader() {
+export function DashboardHeader({
+  className,
+}: {
+  className?: string;
+}) {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 md:px-6">
+    <header
+      className={cn(
+        "sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 md:px-6",
+        className,
+      )}
+    >
       {/* Mobile menu trigger */}
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild className="md:hidden">

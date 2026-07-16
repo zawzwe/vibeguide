@@ -3,9 +3,7 @@
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
-import { ThemeSwitcher } from "@/components/theme-switcher";
-import { LanguageSwitcher } from "@/components/language-switcher";
-import { Folders, PlusCircle, User, Sparkles } from "lucide-react";
+import { Folders, PlusCircle, User } from "lucide-react";
 
 const navItems = [
   { href: "/projects", labelKey: "projects", icon: Folders },
@@ -48,19 +46,9 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
 
 export function Sidebar() {
   return (
-    <aside className="fixed left-0 top-0 z-40 hidden h-screen w-[240px] border-r bg-background md:flex md:flex-col">
-      <Link href="/" className="flex h-14 items-center gap-2 border-b px-6 hover:bg-accent/50 transition-colors">
-        <Sparkles className="h-5 w-5 text-primary" />
-        <span className="font-bold text-lg">VibeGuide</span>
-      </Link>
+    <aside className="fixed left-0 top-14 z-40 hidden h-[calc(100vh-3.5rem)] w-[240px] border-r bg-background md:flex md:flex-col">
       <div className="flex-1 overflow-auto py-4">
         <SidebarNav />
-      </div>
-      <div className="border-t p-4">
-        <div className="flex items-center gap-2">
-          <LanguageSwitcher />
-          <ThemeSwitcher />
-        </div>
       </div>
     </aside>
   );
