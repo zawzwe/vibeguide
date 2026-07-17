@@ -24,6 +24,9 @@ export async function SiteFooter() {
           <Link href="/terms" className="hover:text-foreground transition-colors">
             {t("terms")}
           </Link>
+          <Link href="/aup" className="hover:text-foreground transition-colors">
+            {t("aup")}
+          </Link>
           <a
             href={`mailto:${SUPPORT_EMAIL}`}
             className="inline-flex items-center gap-2 hover:text-foreground transition-colors"
@@ -33,9 +36,14 @@ export async function SiteFooter() {
           </a>
         </nav>
 
-        <p className="w-full border-t pt-5 text-sm text-muted-foreground">
-          {t("copyright")}
-        </p>
+        <div className="w-full border-t pt-5 space-y-1">
+          <p className="text-sm text-muted-foreground">
+            {t("copyright")}
+          </p>
+          <p className="text-xs text-muted-foreground">
+            {t("aiDisclosure")}
+          </p>
+        </div>
       </div>
     </footer>
   );

@@ -13,6 +13,7 @@ type LegalDocumentContent = {
 type LegalContent = {
   privacy: LegalDocumentContent;
   terms: LegalDocumentContent;
+  aup: LegalDocumentContent;
 };
 
 const content: Record<AppLocale, LegalContent> = {
@@ -171,6 +172,53 @@ const content: Record<AppLocale, LegalContent> = {
         },
       ],
     },
+    aup: {
+      title: "Acceptable Use Policy",
+      updatedLabel: "Last updated",
+      updatedAt: "July 17, 2026",
+      introduction:
+        "This Acceptable Use Policy describes prohibited uses of VibeGuide and its AI documentation service. By using VibeGuide, you agree to follow this policy.",
+      sections: [
+        {
+          title: "1. Prohibited content",
+          bullets: [
+            "Content that promotes or facilitates illegal activity, violence, terrorism, or trafficking.",
+            "Content that infringes the intellectual property, privacy, or other rights of others.",
+            "Content that harasses, threatens, impersonates, or defames individuals or groups.",
+            "Sexually explicit or obscene material, child sexual abuse material, or grooming content.",
+            "Content designed to distribute malware, phishing, scams, or credential theft.",
+          ],
+        },
+        {
+          title: "2. Prohibited use",
+          bullets: [
+            "Using the service to generate code or documents for systems that directly cause physical harm or target critical infrastructure without authorization.",
+            "Automated or high-volume requests that degrade service for other users (including unauthorized scraping, stress testing, or denial-of-service attempts).",
+            "Attempting to reverse engineer, bypass limits, or extract the underlying AI model or its training data.",
+            "Selling or redistributing the generated documents as a standalone product or service.",
+            "Creating multiple accounts to circumvent usage limits, credit systems, or prior enforcement actions.",
+          ],
+        },
+        {
+          title: "3. AI model and provider disclosure",
+          paragraphs: [
+            "VibeGuide uses the DeepSeek AI model (provided by DeepSeek / 深度求索) to generate project development documentation. Users are responsible for reviewing all AI-generated content before deploying or relying on it.",
+          ],
+        },
+        {
+          title: "4. Enforcement",
+          paragraphs: [
+            "We may investigate suspected violations and take action, including suspending or terminating access, removing content, and cooperating with law enforcement where required. We may use automated tools and manual review to detect violations.",
+          ],
+        },
+        {
+          title: "5. Reporting and contact",
+          paragraphs: [
+            `Report violations to ${SUPPORT_EMAIL}. We review reports promptly and may request additional information to verify a report before acting.`,
+          ],
+        },
+      ],
+    },
   },
   zh: {
     privacy: {
@@ -323,6 +371,53 @@ const content: Record<AppLocale, LegalContent> = {
           title: "10. 联系我们",
           paragraphs: [
             `VibeGuide 由 Arakai 在中国广东省深圳市运营。如需客服、账单帮助、投诉或发送法律通知，请联系 ${SUPPORT_EMAIL}。`,
+          ],
+        },
+      ],
+    },
+    aup: {
+      title: "可接受使用政策",
+      updatedLabel: "最后更新",
+      updatedAt: "2026 年 7 月 17 日",
+      introduction:
+        "本可接受使用政策说明了 VibeGuide 及其 AI 文档服务的禁止用途。使用 VibeGuide 即表示您同意遵守本政策。",
+      sections: [
+        {
+          title: "1. 禁止内容",
+          bullets: [
+            "促进或协助非法活动、暴力、恐怖主义或人口贩卖的内容。",
+            "侵犯他人知识产权、隐私权或其他权利的内容。",
+            "骚扰、威胁、冒充他人或诽谤个人或群体的内容。",
+            "露骨色情内容、儿童性虐待材料或诱导内容。",
+            "旨在传播恶意软件、钓鱼、诈骗或窃取凭据的内容。",
+          ],
+        },
+        {
+          title: "2. 禁止用途",
+          bullets: [
+            "将本服务用于生成直接造成人身伤害或未经授权针对关键基础设施的系统代码或文档。",
+            "进行自动化或高频率请求，降低其他用户的服务质量（包括未经授权的数据采集、压力测试或拒绝服务攻击）。",
+            "尝试逆向工程、绕过限制或提取底层 AI 模型及其训练数据。",
+            "将生成的文档作为独立产品或服务进行销售或再分发。",
+            "创建多个账户以规避使用限制、积分系统或先前的执法措施。",
+          ],
+        },
+        {
+          title: "3. AI 模型与提供商披露",
+          paragraphs: [
+            "VibeGuide 使用 DeepSeek（深度求索）AI 模型生成项目开发文档。用户有责任在部署或依赖 AI 生成内容前进行审阅。",
+          ],
+        },
+        {
+          title: "4. 执行措施",
+          paragraphs: [
+            "我们可能调查涉嫌违规行为，并采取相应措施，包括暂停或终止访问、删除内容，以及在必要时配合执法部门。我们可能使用自动化工具和人工审核来检测违规行为。",
+          ],
+        },
+        {
+          title: "5. 举报与联系",
+          paragraphs: [
+            `如发现违规行为，请通过 ${SUPPORT_EMAIL} 举报。我们将及时审核报告，并可能要求提供额外信息以在采取行动前进行核实。`,
           ],
         },
       ],

@@ -16,9 +16,11 @@
   "Footer": {
     "privacy": "Privacy Policy",
     "terms": "Terms of Service",
+    "aup": "Acceptable Use Policy",
     "support": "Customer support",
     "operator": "VibeGuide is operated by Arakai.",
-    "copyright": "© 2026 VibeGuide. All rights reserved."
+    "copyright": "© 2026 VibeGuide. All rights reserved.",
+    "aiDisclosure": "This site uses the DeepSeek AI model to generate project development documentation."
   },
   "Home": {
     "loading": "Loading...",

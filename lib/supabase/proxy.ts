@@ -51,6 +51,9 @@ export async function updateSession(
   const isPublicRoute =
     normalizedPathname === "/" ||
     normalizedPathname === "/pricing" ||
+    normalizedPathname === "/privacy" ||
+    normalizedPathname === "/terms" ||
+    normalizedPathname === "/aup" ||
     normalizedPathname.startsWith("/auth") ||
     normalizedPathname === "/api/pay/notify" ||
     normalizedPathname === "/api/pay/return" ||
