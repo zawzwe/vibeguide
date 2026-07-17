@@ -8,8 +8,8 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import {
   Map,
   FileText,
@@ -21,11 +21,20 @@ import {
   FileCode,
   Zap,
   Check,
-  ArrowRight,
 } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { SiteFooter } from "@/components/site-footer";
+import { PricingPurchaseButton } from "@/components/pricing-purchase-button";
+import { CreemBuyButton } from "@/components/creem-buy-button";
+import { notFound } from "next/navigation";
+import { hasLocale } from "next-intl";
+import { routing } from "@/i18n/routing";
+
+const PRODUCT_ID_MAP: Record<string, string> = {
+  "10": process.env.NEXT_PUBLIC_CREEM_PRODUCT_ID_10 || process.env.NEXT_PUBLIC_CREEM_PRODUCT_ID || "",
+  "30": process.env.NEXT_PUBLIC_CREEM_PRODUCT_ID_30 || process.env.NEXT_PUBLIC_CREEM_PRODUCT_ID || "",
+};
 
 const features = [
   { icon: Map, key: "journey" },
@@ -36,7 +45,16 @@ const features = [
   { icon: Download, key: "export" },
 ] as const;
 
-export default async function Home() {
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
+  const isEn = locale === "en";
   const t = await getTranslations("Home");
   const faqItems = t.raw("faq.items") as { q: string; a: string }[];
 
@@ -182,9 +200,13 @@ export default async function Home() {
                     {f}
                   </div>
                 ))}
-                <Button className="w-full mt-4" asChild>
-                  <Link href="/pricing">{t("pricing.buyNow")} <ArrowRight className="h-4 w-4 ml-1" /></Link>
-                </Button>
+                {isEn ? (
+                  <CreemBuyButton productId={PRODUCT_ID_MAP["10"]}>
+                    {t("pricing.buyNow")}
+                  </CreemBuyButton>
+                ) : (
+                  <PricingPurchaseButton plan="10" className="w-full mt-4" />
+                )}
               </CardContent>
             </Card>
             <Card className="relative border-2 border-primary">
@@ -204,9 +226,13 @@ export default async function Home() {
                     {f}
                   </div>
                 ))}
-                <Button className="w-full mt-4" asChild>
-                  <Link href="/pricing">{t("pricing.buyNow")} <ArrowRight className="h-4 w-4 ml-1" /></Link>
-                </Button>
+                {isEn ? (
+                  <CreemBuyButton productId={PRODUCT_ID_MAP["30"]}>
+                    {t("pricing.buyNow")}
+                  </CreemBuyButton>
+                ) : (
+                  <PricingPurchaseButton plan="30" className="w-full mt-4" />
+                )}
               </CardContent>
             </Card>
           </div>
