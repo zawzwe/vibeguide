@@ -36,46 +36,92 @@
     "features": {
       "title": "A complete documentation set in one workflow",
       "description": "Cover every critical stage, from user journeys to database design.",
-      "journey": {"title": "User journey map", "description": "Visualize the complete product experience and identify user needs and pain points."},
-      "prd": {"title": "Product requirements", "description": "Create a structured PRD with clear scope, priorities, and acceptance criteria."},
-      "frontend": {"title": "Frontend design", "description": "Plan components, state management, routes, and the frontend architecture."},
-      "backend": {"title": "Backend design", "description": "Define APIs, business logic, data flows, and service architecture."},
-      "database": {"title": "Database design", "description": "Generate an ER overview, table structures, and an indexing strategy."},
-      "export": {"title": "One-click export", "description": "Download individual Markdown files or export the complete set as a ZIP archive."}
+      "journey": {
+        "title": "User journey map",
+        "description": "Visualize the complete product experience and identify user needs and pain points."
+      },
+      "prd": {
+        "title": "Product requirements",
+        "description": "Create a structured PRD with clear scope, priorities, and acceptance criteria."
+      },
+      "frontend": {
+        "title": "Frontend design",
+        "description": "Plan components, state management, routes, and the frontend architecture."
+      },
+      "backend": {
+        "title": "Backend design",
+        "description": "Define APIs, business logic, data flows, and service architecture."
+      },
+      "database": {
+        "title": "Database design",
+        "description": "Generate an ER overview, table structures, and an indexing strategy."
+      },
+      "export": {
+        "title": "One-click export",
+        "description": "Download individual Markdown files or export the complete set as a ZIP archive."
+      }
     },
     "workflow": {
       "title": "From idea to documentation in three steps",
       "description": "A guided AI workflow turns your description into implementation-ready documents.",
-      "step1": {"title": "1. Describe your project", "description": "Explain your product idea and requirements in your own words."},
-      "step2": {"title": "2. Clarify the requirements", "description": "Answer focused questions that help define the scope and key decisions."},
-      "step3": {"title": "3. Generate the documents", "description": "Create five professional documents that you can review, edit, and download."}
+      "step1": {
+        "title": "1. Describe your project",
+        "description": "Explain your product idea and requirements in your own words."
+      },
+      "step2": {
+        "title": "2. Clarify the requirements",
+        "description": "Answer focused questions that help define the scope and key decisions."
+      },
+      "step3": {
+        "title": "3. Generate the documents",
+        "description": "Create five professional documents that you can review, edit, and download."
+      }
     },
-    "cta": {"title": "Ready to get started?", "description": "Use AI to turn your product idea into a clear technical plan."},
+    "cta": {
+      "title": "Ready to get started?",
+      "description": "Use AI to turn your product idea into a clear technical plan."
+    },
     "pricing": {
       "title": "Simple, transparent pricing",
       "description": "Choose the number of project credits you need. Credits never expire.",
       "currency": "$",
       "basicPrice": "4.99",
-      "proPrice": "9.99",
       "basicName": "Basic",
       "basicDescription": "A practical starting point for solo developers",
-      "proName": "Pro",
-      "proDescription": "Best for builders working across multiple projects",
       "projects": "{count} projects",
-      "basicFeatures": ["Complete docs for 10 projects", "5 document types", "Markdown downloads", "ZIP batch export", "AI requirements analysis"],
-      "proFeatures": ["Complete docs for 30 projects", "5 document types", "Markdown downloads", "ZIP batch export", "AI requirements analysis"],
-      "buyNow": "Buy now",
-      "recommended": "Recommended"
+      "basicFeatures": [
+        "Complete docs for 10 projects",
+        "5 document types",
+        "Markdown downloads",
+        "ZIP batch export",
+        "AI requirements analysis"
+      ],
+      "buyNow": "Buy now"
     },
     "faq": {
       "title": "Frequently asked questions",
       "subtitle": "Everything you need to know about VibeGuide",
       "items": [
-        {"q": "What is VibeGuide?", "a": "VibeGuide is an AI documentation platform for developers and product builders. Describe your idea and it generates a user journey map, PRD, frontend design, backend design, and database design."},
-        {"q": "How do I get started?", "a": "Create an account, start a project, and describe what you want to build. VibeGuide will guide you through requirements analysis before generating your documents."},
-        {"q": "How long does document generation take?", "a": "Generation time varies with project complexity and AI service availability. The five documents are normally processed in parallel."},
-        {"q": "Can I download the documents?", "a": "Yes. Download any document as Markdown, or export the complete project as a ZIP archive."},
-        {"q": "How do project credits work?", "a": "Each generated project uses one credit. The current checkout is processed in CNY through Alipay."}
+        {
+          "q": "What is VibeGuide?",
+          "a": "VibeGuide is an AI documentation platform for developers and product builders. Describe your idea and it generates a user journey map, PRD, frontend design, backend design, and database design."
+        },
+        {
+          "q": "How do I get started?",
+          "a": "Create an account, start a project, and describe what you want to build. VibeGuide will guide you through requirements analysis before generating your documents."
+        },
+        {
+          "q": "How long does document generation take?",
+          "a": "Generation time varies with project complexity and AI service availability. The five documents are normally processed in parallel."
+        },
+        {
+          "q": "Can I download the documents?",
+          "a": "Yes. Download any document as Markdown, or export the complete project as a ZIP archive."
+        },
+        {
+          "q": "How do project credits work?",
+          "a": "Each generated project uses one credit. The current checkout is processed in CNY through Alipay."
+        }
       ]
     }
   },
@@ -84,14 +130,23 @@
     "title": "Choose the plan that fits your work",
     "description": "Each generated project uses one credit. Credits never expire and you can top up at any time.",
     "currency": "$",
-    "recommended": "Recommended",
     "projects": "{count} projects",
     "buyNow": "Buy now",
     "processing": "Processing...",
     "paymentError": "We couldn't start the payment. Please try again.",
     "plans": {
-      "basic": {"name": "Basic", "description": "A practical starting point for solo developers", "price": "4.99", "features": ["Complete docs for 10 projects", "All 5 document types", "Markdown downloads", "ZIP batch export", "AI requirements analysis"]},
-      "pro": {"name": "Pro", "description": "Best for builders working across multiple projects", "price": "9.99", "features": ["Complete docs for 30 projects", "All 5 document types", "Markdown downloads", "ZIP batch export", "AI requirements analysis"]}
+      "basic": {
+        "name": "Basic",
+        "description": "A practical starting point for solo developers",
+        "price": "4.99",
+        "features": [
+          "Complete docs for 10 projects",
+          "All 5 document types",
+          "Markdown downloads",
+          "ZIP batch export",
+          "AI requirements analysis"
+        ]
+      }
     }
   },
   "Auth": {
@@ -149,7 +204,11 @@
     }
   },
   "Dashboard": {
-    "navigation": {"projects": "My projects", "newProject": "New project", "account": "Account"},
+    "navigation": {
+      "projects": "My projects",
+      "newProject": "New project",
+      "account": "Account"
+    },
     "projects": {
       "title": "My projects",
       "description": "Manage your project documentation",
@@ -173,7 +232,10 @@
       "topUp": "Get credits",
       "back": "Back to projects"
     },
-    "detail": {"fallbackTitle": "Project details", "description": "Review and edit your project documentation"},
+    "detail": {
+      "fallbackTitle": "Project details",
+      "description": "Review and edit your project documentation"
+    },
     "account": {
       "title": "Account",
       "description": "Manage your account and project credits",
@@ -194,7 +256,11 @@
     }
   },
   "Wizard": {
-    "steps": {"description": "Describe project", "requirements": "Clarify requirements", "documents": "Create documents"},
+    "steps": {
+      "description": "Describe project",
+      "requirements": "Clarify requirements",
+      "documents": "Create documents"
+    },
     "description": {
       "title": "Describe your project",
       "help": "Share as much detail as possible. The AI will use your description to create professional development documentation.",
@@ -218,7 +284,13 @@
       "creditCheckError": "We couldn't verify your credit balance. Please try again."
     },
     "documents": {
-      "types": {"journey": "User Journey Map", "prd": "Product Requirements Document", "frontend": "Frontend Design Document", "backend": "Backend Design Document", "database": "Database Design Document"},
+      "types": {
+        "journey": "User Journey Map",
+        "prd": "Product Requirements Document",
+        "frontend": "Frontend Design Document",
+        "backend": "Backend Design Document",
+        "database": "Database Design Document"
+      },
       "generating": "Generating documents...",
       "generatingDescription": "The AI is creating your project documentation. This may take a moment.",
       "generationFailed": "Generation failed",

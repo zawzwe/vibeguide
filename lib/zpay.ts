@@ -66,13 +66,8 @@ export function buildPaymentUrl(params: Record<string, string | number>): string
  */
 export const PRICING_PLANS = {
   "10": {
-    price: 20,
+    price: 9.9,
     credits: 10,
     names: { zh: "基础版 - 10个项目点数", en: "Basic - 10 project credits" },
-  },
-  "30": {
-    price: 40,
-    credits: 30,
-    names: { zh: "专业版 - 30个项目点数", en: "Pro - 30 project credits" },
   },
 } as const;

@@ -10,10 +10,7 @@ import { notFound } from "next/navigation";
 import { hasLocale } from "next-intl";
 import { routing } from "@/i18n/routing";
 
-const PRODUCT_ID_MAP: Record<string, string> = {
-  "10": process.env.NEXT_PUBLIC_CREEM_PRODUCT_ID_10 || process.env.NEXT_PUBLIC_CREEM_PRODUCT_ID || "",
-  "30": process.env.NEXT_PUBLIC_CREEM_PRODUCT_ID_30 || process.env.NEXT_PUBLIC_CREEM_PRODUCT_ID || "",
-};
+const CREEM_PRODUCT_ID = process.env.NEXT_PUBLIC_CREEM_PRODUCT_ID || "";
 
 type PricingPlan = {
   name: string;
@@ -21,8 +18,7 @@ type PricingPlan = {
   projects: number;
   description: string;
   features: string[];
-  popular: boolean;
-  plan: "10" | "30";
+  plan: "10";
 };
 
 export default async function PricingPage({
@@ -36,26 +32,14 @@ export default async function PricingPage({
   }
   const isEn = locale === "en";
   const t = await getTranslations("Pricing");
-  const plans: PricingPlan[] = [
-    {
-      name: t("plans.basic.name"),
-      price: t("plans.basic.price"),
-      projects: 10,
-      description: t("plans.basic.description"),
-      features: t.raw("plans.basic.features") as string[],
-      popular: false,
-      plan: "10",
-    },
-    {
-      name: t("plans.pro.name"),
-      price: t("plans.pro.price"),
-      projects: 30,
-      description: t("plans.pro.description"),
-      features: t.raw("plans.pro.features") as string[],
-      popular: true,
-      plan: "30",
-    },
-  ];
+  const plan: PricingPlan = {
+    name: t("plans.basic.name"),
+    price: t("plans.basic.price"),
+    projects: 10,
+    description: t("plans.basic.description"),
+    features: t.raw("plans.basic.features") as string[],
+    plan: "10",
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -73,44 +57,36 @@ export default async function PricingPage({
             </p>
           </div>
 
-          <div className="grid gap-8 md:grid-cols-2 max-w-2xl mx-auto">
-            {plans.map((plan) => (
-              <Card
-                key={plan.name}
-                className={`relative ${plan.popular ? "border-primary border-2" : "border-2"}`}
-              >
-                {plan.popular && (
-                  <Badge className="absolute -top-3 left-1/2 -translate-x-1/2">{t("recommended")}</Badge>
+          <div className="max-w-sm mx-auto">
+            <Card className="border-2">
+              <CardHeader>
+                <CardTitle className="text-xl">{plan.name}</CardTitle>
+                <div className="mt-4">
+                  <span className="text-4xl font-bold">{t("currency")}{plan.price}</span>
+                  <span className="text-muted-foreground ml-2">
+                    / {t("projects", { count: plan.projects })}
+                  </span>
+                </div>
+                <CardDescription>{plan.description}</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  {plan.features.map((f) => (
+                    <div key={f} className="flex items-center gap-2 text-sm">
+                      <Check className="h-4 w-4 text-primary flex-shrink-0" />
+                      {f}
+                    </div>
+                  ))}
+                </div>
+                {isEn ? (
+                  <CreemBuyButton productId={CREEM_PRODUCT_ID}>
+                    {t("buyNow")}
+                  </CreemBuyButton>
+                ) : (
+                  <PricingPurchaseButton plan={plan.plan} className="w-full" />
                 )}
-                <CardHeader>
-                  <CardTitle className="text-xl">{plan.name}</CardTitle>
-                  <div className="mt-4">
-                    <span className="text-4xl font-bold">{t("currency")}{plan.price}</span>
-                    <span className="text-muted-foreground ml-2">
-                      / {t("projects", { count: plan.projects })}
-                    </span>
-                  </div>
-                  <CardDescription>{plan.description}</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    {plan.features.map((f) => (
-                      <div key={f} className="flex items-center gap-2 text-sm">
-                        <Check className="h-4 w-4 text-primary flex-shrink-0" />
-                        {f}
-                      </div>
-                    ))}
-                  </div>
-                  {isEn ? (
-                    <CreemBuyButton productId={PRODUCT_ID_MAP[plan.plan]}>
-                      {t("buyNow")}
-                    </CreemBuyButton>
-                  ) : (
-                    <PricingPurchaseButton plan={plan.plan} className="w-full" />
-                  )}
-                </CardContent>
-              </Card>
-            ))}
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>

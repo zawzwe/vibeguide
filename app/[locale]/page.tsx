@@ -31,10 +31,7 @@ import { notFound } from "next/navigation";
 import { hasLocale } from "next-intl";
 import { routing } from "@/i18n/routing";
 
-const PRODUCT_ID_MAP: Record<string, string> = {
-  "10": process.env.NEXT_PUBLIC_CREEM_PRODUCT_ID_10 || process.env.NEXT_PUBLIC_CREEM_PRODUCT_ID || "",
-  "30": process.env.NEXT_PUBLIC_CREEM_PRODUCT_ID_30 || process.env.NEXT_PUBLIC_CREEM_PRODUCT_ID || "",
-};
+const CREEM_PRODUCT_ID = process.env.NEXT_PUBLIC_CREEM_PRODUCT_ID || "";
 
 const features = [
   { icon: Map, key: "journey" },
@@ -183,8 +180,8 @@ export default async function Home({
               {t("pricing.description")}
             </p>
           </div>
-          <div className="grid gap-8 md:grid-cols-2 max-w-2xl mx-auto">
-            <Card className="relative border-2">
+          <div className="max-w-sm mx-auto">
+            <Card className="border-2">
               <CardHeader>
                 <CardTitle className="text-xl">{t("pricing.basicName")}</CardTitle>
                 <div className="mt-4">
@@ -201,37 +198,11 @@ export default async function Home({
                   </div>
                 ))}
                 {isEn ? (
-                  <CreemBuyButton productId={PRODUCT_ID_MAP["10"]}>
+                  <CreemBuyButton productId={CREEM_PRODUCT_ID}>
                     {t("pricing.buyNow")}
                   </CreemBuyButton>
                 ) : (
                   <PricingPurchaseButton plan="10" className="w-full mt-4" />
-                )}
-              </CardContent>
-            </Card>
-            <Card className="relative border-2 border-primary">
-              <Badge className="absolute -top-3 left-1/2 -translate-x-1/2">{t("pricing.recommended")}</Badge>
-              <CardHeader>
-                <CardTitle className="text-xl">{t("pricing.proName")}</CardTitle>
-                <div className="mt-4">
-                  <span className="text-4xl font-bold">{t("pricing.currency")}{t("pricing.proPrice")}</span>
-                  <span className="text-muted-foreground ml-2">/ {t("pricing.projects", { count: 30 })}</span>
-                </div>
-                <CardDescription>{t("pricing.proDescription")}</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {(t.raw("pricing.proFeatures") as string[]).map((f) => (
-                  <div key={f} className="flex items-center gap-2 text-sm">
-                    <Check className="h-4 w-4 text-primary flex-shrink-0" />
-                    {f}
-                  </div>
-                ))}
-                {isEn ? (
-                  <CreemBuyButton productId={PRODUCT_ID_MAP["30"]}>
-                    {t("pricing.buyNow")}
-                  </CreemBuyButton>
-                ) : (
-                  <PricingPurchaseButton plan="30" className="w-full mt-4" />
                 )}
               </CardContent>
             </Card>
